@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">ImageLauncher</string>
+	<string name="pharo_act">PharoCore</string>
+	<string name="pharo_imgpath">/sdcard/PharoCore-1.3-13137/PharoCore-1.3.image</string>
+	<string name="squeak_act">Squeak4.1</string>
+	<string name="squeak_imgpath">/sdcard/Squeak4.1/Squeak4.1.image</string>
+</resources>
+

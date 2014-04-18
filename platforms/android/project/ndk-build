@@ -1,0 +1,26 @@
+# Change to your actual path to android NDK
+#
+# Don't forget just after you downloaded/checked out the sources, run the following:
+#
+# # android update project -p . -t android-4
+#
+export NDK_ROOT=$NDK
+export NDK_TOOLCHAIN=arm-linux-androideabi-4.4.3
+
+absroot=`pwd | sed 's/[^\/]*/../g'`
+
+gccprg=`find $NDK_ROOT -type f -name gcc | grep $NDK_TOOLCHAIN`
+
+../../android/config/verstamp ../../../build/version.c $gccprg
+
+rm -f bin/classes.dex bin/classes.jar bin/CogDroid*
+
+# If under Jenkins, do not run ant.
+
+$NDK_ROOT/ndk-build NDK_DEBUG=0 ROOT=$absroot $@ && 
+(
+  if [ x"$EXECUTOR_NUMBER" = "x" ] ; then 
+    ant debug
+  fi
+)
+
