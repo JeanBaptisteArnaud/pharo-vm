@@ -1,0 +1,15 @@
+{
+	"category" : "VMMaker-Plugins-Android",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		"CogEnv",
+		"CogVM" ],
+	"commentStamp" : "golubovsky 9/3/2011 21:20",
+	"instvars" : [
+		 ],
+	"name" : "AndroidPlugin",
+	"pools" : [
+		 ],
+	"super" : "InterpreterPlugin",
+	"type" : "normal" }

@@ -1,0 +1,1 @@
+This is a plugin for the Android port of Cog providing generic interface to Android Java runtime.

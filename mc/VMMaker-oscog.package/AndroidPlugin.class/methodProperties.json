@@ -1,0 +1,11 @@
+{
+	"class" : {
+		"declareCVarsIn:" : "golubovsky 9/7/2011 23:02" },
+	"instance" : {
+		"primBriefMessage" : "golubovsky 9/12/2011 22:41",
+		"primInAndroid" : "golubovsky 9/12/2011 22:40",
+		"primSetPitch" : "golubovsky 9/13/2011 22:53",
+		"primSetSpeechRate" : "golubovsky 9/13/2011 23:06",
+		"primShortCut" : "golubovsky 9/22/2011 23:08",
+		"primSpeak" : "golubovsky 9/12/2011 22:53",
+		"stringArgumentAt:" : "golubovsky 9/5/2011 00:25" } }
