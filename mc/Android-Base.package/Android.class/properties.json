@@ -1,0 +1,14 @@
+{
+	"category" : "Android-Base",
+	"classinstvars" : [
+		 ],
+	"classvars" : [
+		 ],
+	"commentStamp" : "golubovsky 9/3/2011 22:24",
+	"instvars" : [
+		 ],
+	"name" : "Android",
+	"pools" : [
+		 ],
+	"super" : "Object",
+	"type" : "normal" }

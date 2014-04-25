@@ -1,0 +1,13 @@
+{
+	"class" : {
+		"briefMessage:" : "golubovsky 9/12/2011 22:41",
+		"createShortcutFor:withLabel:andCommand:andIcon:" : "golubovsky 9/30/2011 21:23",
+		"createShortcutFor:withLabel:andCommand:iconWH:iconFlags:iconBits:" : "golubovsky 9/22/2011 21:11",
+		"createShortcutFor:withLabel:andIcon:" : "golubovsky 9/30/2011 21:25",
+		"getClipboardString" : "golubovsky 12/29/2011 23:22",
+		"inAndroid" : "golubovsky 9/12/2011 22:39",
+		"setPitch:" : "golubovsky 9/13/2011 22:57",
+		"setSpeechRate:" : "golubovsky 9/13/2011 22:58",
+		"speak:" : "golubovsky 9/12/2011 22:54" },
+	"instance" : {
+		 } }
