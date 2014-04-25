@@ -10,8 +10,10 @@ interpret
 	"record entry time when running as a browser plug-in"
 	self browserPluginInitialiseIfNeeded.
 	"set up a jmp_buf to bail out when no processes are ready to run"
-	result := self cCode: 'setjmp(jmpBufExit)' 
-				inSmalltalk:[jmpBufExit := [^self]. 0].
+	result := 
+		self cCode: 'setjmp(jmpBufExit)' 
+				inSmalltalk:[jmpBufExit := [^self]. 
+					0].
 	result = 0 ifFalse:[^0].	"return 0 when suspended for an event"
 	self internalizeIPandSP.
 	self fetchNextBytecode.

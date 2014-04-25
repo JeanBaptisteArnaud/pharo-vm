@@ -13,7 +13,7 @@ asTranslatorNodeIn: aTMethod
 	(self anyReturns: valueNode statements allButLast) ifTrue:
 		[self error: 'haven''t implemented pushing down assignments into other than the last return'].
 	"As of 6/25/2012 19:30 superExpansionNodeFor:args: elides the final return."
-	self assert: valueNode statements last isReturn not.
+"	self assert: valueNode statements last isReturn not."
 	^TStmtListNode new
 		setStatements: valueNode statements allButLast,
 					{ TAssignmentNode new
