@@ -5,7 +5,7 @@
 # # android update project -p . -t android-4
 #
 export NDK_ROOT=$NDK
-export NDK_TOOLCHAIN=arm-linux-androideabi-4.4.3
+export NDK_TOOLCHAIN=arm-linux-androideabi-4.6
 
 absroot=`pwd | sed 's/[^\/]*/../g'`
 
