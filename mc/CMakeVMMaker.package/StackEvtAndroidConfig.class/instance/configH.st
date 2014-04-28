@@ -6,7 +6,7 @@ configH
 #define __sq_config_h
 
 /* explicit image width */
-
+#define SQUEAK_BUILTIN_PLUGIN 1
 #define	HAVE_INTERP_H 1
 
 /* package options */
