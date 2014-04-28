@@ -21,6 +21,5 @@ configureFloatMathPlugin: maker
 	self isLittleEndian ifTrue: [
 		maker addDefinitions: '-D__LITTLE_ENDIAN=1' ].
 
-	maker addDefinitions: '-DNO_ISNAN'.
 	
 

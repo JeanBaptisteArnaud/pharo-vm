@@ -3,10 +3,10 @@
 		 },
 	"instance" : {
 		"compilerFlags" : "golubovsky 7/28/2011 21:49",
-		"configH" : "golubovsky 7/31/2011 00:12",
+		"configH" : "jb 4/28/2014 18:48",
 		"configureFileCopyPlugin:" : "golubovsky 8/1/2011 23:04",
 		"configureFilePlugin:" : "golubovsky 8/1/2011 23:17",
-		"configureFloatMathPlugin:" : "golubovsky 7/29/2011 23:00",
+		"configureFloatMathPlugin:" : "jb 4/28/2014 18:47",
 		"configureJoystickTabletPlugin:" : "golubovsky 8/1/2011 23:31",
 		"configureLocalePlugin:" : "golubovsky 1/4/2012 21:50",
 		"configureSecurityPlugin:" : "golubovsky 8/12/2011 00:22",

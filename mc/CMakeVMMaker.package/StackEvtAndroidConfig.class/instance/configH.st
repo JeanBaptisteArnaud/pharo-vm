@@ -83,7 +83,7 @@ configH
 #define	HAVE_ALLOCA_H 1
 
 #define	HAVE_UNSETENV 1
-
+#define 	NO_ISNAN 1
 #define	HAVE_NANOSLEEP 1
 
 /* widths of primitive types */
