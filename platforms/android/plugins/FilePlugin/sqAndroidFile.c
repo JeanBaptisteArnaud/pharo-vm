@@ -152,7 +152,7 @@ static int maybeOpenDir(char *unixPath)
 
 sqInt dir_Lookup(char *pathString, sqInt pathStringLength, sqInt index,
 /* outputs: */  char *name, sqInt *nameLength, sqInt *creationDate, sqInt *modificationDate,
-		sqInt *isDirectory, squeakFileOffsetType *sizeIfFile)
+		sqInt *isDirectory, squeakFileOffsetType *sizeIfFile, sqInt *posixPermissions, sqInt *isSymlink))
 {
   /* Lookup the index-th entry of the directory with the given path, starting
      at the root of the file system. Set the name, name length, creation date,
@@ -240,13 +240,16 @@ sqInt dir_Lookup(char *pathString, sqInt pathStringLength, sqInt index,
   else
     *sizeIfFile= statBuf.st_size;
 
+
+  *isSymlink = S_ISLNK(statBuf.st_mode);
+  *posixPermissions = statBuf.st_mode & 0777;
   return ENTRY_FOUND;
 }
 
 
 sqInt dir_EntryLookup(char *pathString, sqInt pathStringLength, char* nameString, sqInt nameStringLength,
 /* outputs: */  char *name, sqInt *nameLength, sqInt *creationDate, sqInt *modificationDate,
-		sqInt *isDirectory, squeakFileOffsetType *sizeIfFile)
+		sqInt *isDirectory, squeakFileOffsetType *sizeIfFile, sqInt *posixPermissions, sqInt *isSymlink)
 {
   /* Lookup the given name in the given directory,
      Set the name, name length, creation date,
@@ -294,6 +297,9 @@ sqInt dir_EntryLookup(char *pathString, sqInt pathStringLength, char* nameString
   else
     *sizeIfFile= statBuf.st_size;
 
+  *isSymlink = S_ISLNK(statBuf.st_mode);
+  *posixPermissions = statBuf.st_mode & 0777;
+  
   return ENTRY_FOUND;
 }
 
