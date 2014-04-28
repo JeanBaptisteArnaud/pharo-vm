@@ -9,7 +9,7 @@ generate
 	
 	self addDefinitions: '-DSQUEAK_BUILTIN_PLUGIN'.
 	
-	self addSources: { name , '.c' } prefixed: '/builds/workspace/ARM-Android/build/', name.
+	self addSources: { name , '.c' } prefixed: '/builds/workspace/ARM-Android/build/', name,'/'.
 
 	self includeDirectories: '-I/builds/workspace/ARM-Android/src/ -I/builds/workspace/ARM-Android/platforms/Cross/plugins/ -I$/builds/workspace/ARM-Android/platforms/android/plugins/', name.
 
