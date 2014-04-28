@@ -11,7 +11,11 @@ generate
 	
 	self addSources: { name , '.c' } prefixed: '/builds/workspace/ARM-Android/src/plugins/', name,'/'.
 
-	self includeDirectories: '/builds/workspace/ARM-Android/src/ /builds/workspace/ARM-Android/platforms/Cross/plugins/ /builds/workspace/ARM-Android/platforms/android/plugins/', name, '/'.
+	self includeDirectories: '/builds/workspace/ARM-Android/src/'.
+	self includeDirectories: '/builds/workspace/ARM-Android/platforms/Cross/plugins/', name, '/'.
+	self includeDirectories: '/builds/workspace/ARM-Android/platforms/android/plugins/', name, '/'.
+	
+
 
 	self addDefinitions: vmGen config compilerFlags.
 
