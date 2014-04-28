@@ -7,17 +7,11 @@ generate
 	name := plugin moduleName.
 	self printHeader.
 	
-	self 
-		set: #pluginName to: name;
-		set: #pluginSrc to: '$(srcPluginsDir)/', name;
-		set: #pluginCross to: '$(crossDir)/plugins/', name;
-		set: #pluginPlatform to: '$(targetPlatform)/plugins/', name.
-		
 	self addDefinitions: '-DSQUEAK_BUILTIN_PLUGIN'.
 	
-	self addSources: { name , '.c' } prefixed: '$(pluginSrc)/'.
+	self addSources: { name , '.c' } prefixed: '/builds/workspace/ARM-Android/build/', name.
 
-	self includeDirectories: '-I$(pluginSrc) -I$(pluginCross) -I$(targetPlatform)/plugins/$(pluginName)'.
+	self includeDirectories: '-I/builds/workspace/ARM-Android/src/ -I/builds/workspace/ARM-Android/platforms/Cross/plugins/ -I$/builds/workspace/ARM-Android/platforms/android/plugins/', name.
 
 	self addDefinitions: vmGen config compilerFlags.
 
