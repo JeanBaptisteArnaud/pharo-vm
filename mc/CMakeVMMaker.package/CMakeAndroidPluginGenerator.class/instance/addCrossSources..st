@@ -1,4 +1,4 @@
 sources management
 addCrossSources: sources
 
-	^ self addSources: sources prefixed: '$(pluginCross)/'
+	^ self addSources: sources prefixed: '/builds/workspace/ARM-Android/platform/Cross/plugins/'
