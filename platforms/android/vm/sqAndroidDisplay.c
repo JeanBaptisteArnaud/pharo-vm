@@ -23,6 +23,7 @@
 
 #include <stdio.h>
 
+int dprintf(int logLvl, const char *fmt, ...);
 
 #include "sqAndroidEvents.c"		/* see X11 and/or Quartz drivers for examples */
 
@@ -116,6 +117,20 @@ void jprintf(const char *fmt, ...) {
    10 - ADDED FOR printOop and friends
  */
 static int vmLogLevel = 5;
+int dprintf(int logLvl, const char *fmt, ...) {
+  int result;
+  va_list args;
+  va_start(args, fmt);
+  if(logLvl <= vmLogLevel) {
+	result = __android_log_vprint(ANDROID_LOG_INFO, "CogVM", fmt, args);
+	char str[10000];
+	vsnprintf(str, 9999, fmt, args);
+	jnilog(str);
+  }
+  va_end(args);
+  return result;
+}
+
 /*
  * Find a method with given name, signature, class.
  * Uses the saved environment.
@@ -238,6 +253,7 @@ char *callStringMethodOnwith(jmethodID meth, jobject obj, ...)
 
 void
 Java_org_golubovsky_cogstack_CogVM_surelyExit(JNIEnv *env, jobject self) {
+  dprintf(9, "exiting for sure\n");
   exit(0);
 }
 
@@ -246,6 +262,7 @@ Java_org_golubovsky_cogstack_CogVM_setScreenSize(JNIEnv *env, jobject self,
 					       int w, int h) {
   scrw = w;
   scrh = h;
+  dprintf(9, "setScreenSize w: %d, h: %d\n", scrw, scrh);
   return 0;
 }
 
@@ -253,11 +270,13 @@ int
 Java_org_golubovsky_cogstack_CogVM_interpret(JNIEnv *env, jobject jsqueak) {
   JNIEnv *oldEnv = CogEnv;
   jobject *oldCog = CogVM;
+  //dprintf(7, "Interpret Enter\n");
   CogEnv = env;
   CogVM = jsqueak;
   int rc = interp_run();
   CogEnv = oldEnv;
   CogVM = oldCog;
+  //dprintf(7, "Interpret Leave\n");
   return rc;
 }
 
@@ -276,9 +295,15 @@ Java_org_golubovsky_cogstack_CogVM_updateDisplay(JNIEnv *env, jobject self,
   if (width == 777 && height == 777) return 1;
 
   if(depth != 32) {
+    dprintf(4, "updateDisplay: Display depth %d\n", depth);
     return 0;
   }
-  
+  if(width != w) {
+    dprintf(4, "updateDisplay: Display width is %d (expected %d)\n", width, w);
+  }
+  if(height != h) {
+    dprintf(4, "updateDisplay: Display height is %d (expected %d)\n", height, h);
+  }
   for(row = top; row < bottom; row++) {
   	int ofs = width*row+left;
   	(*env)->SetIntArrayRegion(env, bits, ofs, right-left, dispBits+ofs);
@@ -297,6 +322,7 @@ Java_org_golubovsky_cogstack_CogVM_sendEvent(JNIEnv *env, jobject self, int
 					   int arg3, int arg4, int arg5,
 					   int arg6, int arg7, int arg8) {
 
+//dprintf(7, "sendEvent type=%d\n", type);
     int empty = iebEmptyP();
     switch(type) {
 	case 1:				/* mouse/touch event, arg3=x, arg4=y, arg5=buttons */
@@ -304,6 +330,7 @@ Java_org_golubovsky_cogstack_CogVM_sendEvent(JNIEnv *env, jobject self, int
 	    mousePosition.y = arg4;
             buttonState = arg5;
 	    recordMouseEvent();
+//dprintf(7, "mouse x=%d y=%d %d\n", arg3, arg4, arg5);
 	    break;
 	case 2:				/* keyboard input, arg3=charCode, arg5=mods, arg6=ucs4 */
 	    recordKeyboardEvent(arg3, arg4, arg5, arg6);
@@ -392,7 +419,9 @@ Java_org_golubovsky_cogstack_CogVM_setImagePath(JNIEnv *env, jobject self,
   int maximgarg = 128;
   char *imgargv[maximgarg];
   int imgargc = splitcmd(cmdd, maximgarg, imgargv);
-  int z;
+int z;
+for(z = 0; z < imgargc; z++)
+	dprintf(9, "split [%d]: %s\n", z, imgargv[z]);
   char *baseargs[] = {fakeExe, imageName};
   int argl = 2 + imgargc + 1;
   char **argc = alloca(sizeof(char *) * argl);
@@ -401,7 +430,10 @@ Java_org_golubovsky_cogstack_CogVM_setImagePath(JNIEnv *env, jobject self,
   for(j = 0; j < imgargc; j++, i++) argc[i] = imgargv[j];
   argc[i] = NULL;
   char *envp[] = {NULL};
+for(z = 0; z < argl; z++)
+	dprintf(9, "argc [%d]: %s\n", z, argc[z]);
   int rc = interp_init(argl - 1, argc, envp);
+dprintf(5, "after interp_init\n");
   (*env)->ReleaseStringUTFChars(env, imageName_, imgpath);
   (*env)->ReleaseStringUTFChars(env, cmd_, cmd);
   jclass cls = (*env)->GetObjectClass(env, self);
@@ -575,6 +607,7 @@ static void display_winExit(void)
     meth = (*CogEnv)->GetMethodID(CogEnv, cls, "finish", "()V");
     if (meth == NULL) return;
     (*CogEnv)->CallVoidMethod(CogEnv, CogVM, meth);
+    dprintf(9, "called VM finish method\n");
 }
 
 static int  display_winImageFind(char *buf, int len)		{ trace();  return 0; }

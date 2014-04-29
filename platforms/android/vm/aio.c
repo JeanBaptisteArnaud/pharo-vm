@@ -102,7 +102,7 @@
 
 #define _DO_FLAG_TYPE()	do { _DO(AIO_R, rd) _DO(AIO_W, wr) _DO(AIO_X, ex) } while (0)
 
-#define perror(x) dprintf(3, "#x: %s\n", strerror(errno))
+#define perror(x) fprintf(3, "#x: %s\n", strerror(errno))
 
 static int one= 1;
 
