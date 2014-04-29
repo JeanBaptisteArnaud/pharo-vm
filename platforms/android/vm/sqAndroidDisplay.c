@@ -402,7 +402,6 @@ for(z = 0; z < imgargc; z++)
   for(j = 0; j < imgargc; j++, i++) argc[i] = imgargv[j];
   argc[i] = NULL;
   char *envp[] = {NULL};
-for(z = 0; z < argl; z++)
   int rc = interp_init(argl - 1, argc, envp);
   (*env)->ReleaseStringUTFChars(env, imageName_, imgpath);
   (*env)->ReleaseStringUTFChars(env, cmd_, cmd);
