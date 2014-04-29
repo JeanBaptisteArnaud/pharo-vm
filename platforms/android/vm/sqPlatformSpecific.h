@@ -166,5 +166,9 @@ void callVoidMethodOnwith(jmethodID, jobject, ...);
 char *callStringMethodOnwith(jmethodID, jobject, ...);
 #define callVoidMethodOnwithmanyargs callVoidMethodOnwith
 
+#define sqImageFileReadEntireImage(memoryAddress, elementSize,  length, fileStream) \
+	sqImageFileRead(memoryAddress, elementSize,  length, fileStream)
+
+
 #define bytesPerWord() sizeof(int)
 
