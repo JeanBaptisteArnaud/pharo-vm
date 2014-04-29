@@ -21,7 +21,7 @@ defaultInternalPlugins
 		RePlugin 	
 		SecurityPlugin 
 		JPEGReadWriter2Plugin 
-		SocketPlugin 
+		"SocketPlugin"
 		MiscPrimitivePlugin 
 		DeflatePlugin  "ZipPlugin"
 		)
