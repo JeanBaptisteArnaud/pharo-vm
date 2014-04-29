@@ -66,6 +66,9 @@ ioLocalMicroseconds()
 {
 	return currentUTCMicroseconds() + vmGMTOffset;
 }
+
+usqInt
+ioLocalSecondsOffset() { return (usqInt)(vmGMTOffset / MicrosecondsPerSecond); }
 	
 
 /* This is an expensive interface for use by profiling code that wants the time
