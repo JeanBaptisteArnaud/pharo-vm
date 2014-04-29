@@ -392,8 +392,7 @@ Java_org_golubovsky_cogstack_CogVM_setImagePath(JNIEnv *env, jobject self,
   int maximgarg = 128;
   char *imgargv[maximgarg];
   int imgargc = splitcmd(cmdd, maximgarg, imgargv);
-int z;
-for(z = 0; z < imgargc; z++)
+  int z;
   char *baseargs[] = {fakeExe, imageName};
   int argl = 2 + imgargc + 1;
   char **argc = alloca(sizeof(char *) * argl);
