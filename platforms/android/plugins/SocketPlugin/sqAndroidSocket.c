@@ -225,7 +225,6 @@ static void closeHandler(int, void *, int);
 
 /* this MUST be turned on if DEBUG is turned on in aio.c  */
 
-#ifdef AIO_DEBUG
 char *socketHandlerName(aioHandler h)
 {
   if (h == acceptHandler)     return "acceptHandler";
@@ -234,7 +233,6 @@ char *socketHandlerName(aioHandler h)
   if (h == closeHandler)      return "closeHandler";
   return "***unknownHandler***";
 }
-#endif
 
 
 /*** module initialisation/shutdown ***/
