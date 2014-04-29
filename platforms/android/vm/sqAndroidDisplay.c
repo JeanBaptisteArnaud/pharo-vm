@@ -252,13 +252,13 @@ char *callStringMethodOnwith(jmethodID meth, jobject obj, ...)
 /* force exit at the process level to make sure that the native library unloads */
 
 void
-Java_org_golubovsky_cogstack_CogVM_surelyExit(JNIEnv *env, jobject self) {
+Java_org_pharo_stack_StackVM_surelyExit(JNIEnv *env, jobject self) {
   dprintf(9, "exiting for sure\n");
   exit(0);
 }
 
 int
-Java_org_golubovsky_cogstack_CogVM_setScreenSize(JNIEnv *env, jobject self,
+Java_org_pharo_stack_StackVM_setScreenSize(JNIEnv *env, jobject self,
 					       int w, int h) {
   scrw = w;
   scrh = h;
@@ -267,7 +267,7 @@ Java_org_golubovsky_cogstack_CogVM_setScreenSize(JNIEnv *env, jobject self,
 }
 
 int 
-Java_org_golubovsky_cogstack_CogVM_interpret(JNIEnv *env, jobject jsqueak) {
+Java_org_pharo_stack_StackVM_interpret(JNIEnv *env, jobject jsqueak) {
   JNIEnv *oldEnv = CogEnv;
   jobject *oldCog = CogVM;
   //dprintf(7, "Interpret Enter\n");
@@ -281,7 +281,7 @@ Java_org_golubovsky_cogstack_CogVM_interpret(JNIEnv *env, jobject jsqueak) {
 }
 
 int 
-Java_org_golubovsky_cogstack_CogVM_updateDisplay(JNIEnv *env, jobject self,
+Java_org_pharo_stack_StackVM_updateDisplay(JNIEnv *env, jobject self,
 					       jintArray bits, int w, int h,
 					       int d, int left, int top, int right, int bottom) {
   int row;
@@ -317,7 +317,7 @@ Java_org_golubovsky_cogstack_CogVM_updateDisplay(JNIEnv *env, jobject self,
  */
 
 int 
-Java_org_golubovsky_cogstack_CogVM_sendEvent(JNIEnv *env, jobject self, int 
+Java_org_pharo_stack_StackVM_sendEvent(JNIEnv *env, jobject self, int 
 					   type, int stamp,
 					   int arg3, int arg4, int arg5,
 					   int arg6, int arg7, int arg8) {
@@ -400,7 +400,7 @@ static int splitcmd(char *cmd, int maxargc, char **argv) {
  */
 
 int 
-Java_org_golubovsky_cogstack_CogVM_setImagePath(JNIEnv *env, jobject self,
+Java_org_pharo_stack_StackVM_setImagePath(JNIEnv *env, jobject self,
 					      jstring imageName_, jstring cmd_) {
   const char *imgpath = (*env)->GetStringUTFChars(env, imageName_, 0);
   const char *cmd = (*env)->GetStringUTFChars(env, cmd_, 0);
@@ -442,7 +442,7 @@ dprintf(5, "after interp_init\n");
 }
 
 int
-Java_org_golubovsky_cogstack_CogVM_setLogLevel(JNIEnv *env, jobject self, 
+Java_org_pharo_stack_StackVM_setLogLevel(JNIEnv *env, jobject self, 
 					  int logLevel) {
   unlink(LOG_FILE);
   vmLogLevel = logLevel;
