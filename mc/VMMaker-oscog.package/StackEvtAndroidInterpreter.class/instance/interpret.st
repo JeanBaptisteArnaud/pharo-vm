@@ -5,7 +5,6 @@ interpret
 	| result |
 	<inline: false>
 	"If stacklimit is zero then the stack pages have not been initialized."
-	self  printOop: method.
 	stackLimit = 0 ifTrue:
 		[^self initStackPagesAndInterpret].
 	"record entry time when running as a browser plug-in"
@@ -18,7 +17,9 @@ interpret
 	result = 0 ifFalse:[^0].	"return 0 when suspended for an event"
 	self internalizeIPandSP.
 	self fetchNextBytecode.
-	[true] whileTrue: [self dispatchOn: currentBytecode in: BytecodeTable].
+	[true] whileTrue: [
+		self printNum: currentBytecode.
+		self dispatchOn: currentBytecode in: BytecodeTable].
 	localIP := localIP - 1.  "undo the pre-increment of IP before returning"
 	self externalizeIPandSP.
 	^1	"return 1 if normal VM termination"
