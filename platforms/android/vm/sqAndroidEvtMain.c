@@ -1306,13 +1306,17 @@ static long hostmsecs = 0, hostmax = 0, hostmin = 0xFFFFFFFFL;
  */
 
 int interp_run() {
+	dprintf(9, "interp_run ININ\n");
     if (nohrtbit) nohrtbit = 0;
     else heartbeat();
+	dprintf(9, "interpret 1\n");
     alarmed = 0;
     struct itimerval tval, oval;
     tval.it_interval = (struct timeval) {.tv_sec = 0, .tv_usec = 0};
     tval.it_value = (struct timeval){.tv_sec = ALARM_MS / 1000, .tv_usec = ALARM_MS * 1000};
+	dprintf(9, "interpret 2\n");
     setitimer(ITIMER_REAL, &tval, &oval);
+	dprintf(9, "interpret 3\n");
     long t1 = (ioUTCMicroseconds() / 1000LL);
     if(lastexit != 0) {
       long hosttm = t1 - lastexit;
@@ -1321,9 +1325,12 @@ int interp_run() {
       if(hosttm > hostmax) hostmax = hosttm;
       if(hosttm < hostmin) hostmin = hosttm;
     }
+	dprintf(9, "interpret 4\n");
     interpcnt++;
-    interpret();
-    long t2 = (ioUTCMicroseconds() / 1000LL);
+    dprintf(9, "B interpret\n");
+	interpret();
+	dprintf(9, "B interpret out\n");
+    long t2 = (ioUTCMicroseconds() / 1000LL);	
     long interptm = t2 - t1;
     lastexit = t2;
     tval.it_value = (struct timeval){.tv_sec = 0, .tv_usec = 0};

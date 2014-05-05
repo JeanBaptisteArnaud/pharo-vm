@@ -273,7 +273,9 @@ Java_org_pharo_stack_StackVM_interpret(JNIEnv *env, jobject jsqueak) {
   dprintf(7, "Interpret Enter\n");
   CogEnv = env;
   CogVM = jsqueak;
+  dprintf(7, "interp_run Enter\n");
   int rc = interp_run();
+  dprintf(7, "interp_run Leave\n");
   CogEnv = oldEnv;
   CogVM = oldCog;
   dprintf(7, "Interpret Leave\n");
@@ -482,7 +484,7 @@ static sqInt display_clipboardReadIntoAt(sqInt count, sqInt byteArrayIndex, sqIn
   trace();
   return 0;
 }
- 
+
 
 static sqInt display_ioFormPrint(sqInt bitsIndex, sqInt width, sqInt height, sqInt depth, double hScale, double vScale, sqInt landscapeFlag)
 {
