@@ -5,7 +5,7 @@ interpret
 	| result |
 	<inline: false>
 	"If stacklimit is zero then the stack pages have not been initialized."
-	self printStackCallStack.
+	self printCallStack.
 	stackLimit = 0 ifTrue:
 		[^self initStackPagesAndInterpret].
 	"record entry time when running as a browser plug-in"
