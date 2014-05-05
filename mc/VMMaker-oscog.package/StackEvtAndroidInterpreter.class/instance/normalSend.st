@@ -7,7 +7,7 @@ normalSend
 	<sharedCodeNamed: 'normalSend' inCase: #singleExtendedSendBytecode>
 	| rcvr |
 	rcvr := self internalStackValue: argumentCount.
-	self printOop: rcvr.
+	self print: 'nornalSend'.
 	lkupClass := objectMemory fetchClassOf: rcvr.
 	self assert: lkupClass ~= objectMemory nilObject.
 	self commonSend
