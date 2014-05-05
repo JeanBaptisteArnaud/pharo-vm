@@ -122,7 +122,7 @@ int dprintf(int logLvl, const char *fmt, ...) {
   va_list args;
   va_start(args, fmt);
   if(logLvl <= vmLogLevel) {
-	result = __android_log_vprint(ANDROID_LOG_INFO, "CogVM", fmt, args);
+	result = __android_log_vprint(ANDROID_LOG_INFO, "PharoVMLog C files", fmt, args);
 	char str[10000];
 	vsnprintf(str, 9999, fmt, args);
 	jnilog(str);
@@ -270,13 +270,13 @@ int
 Java_org_pharo_stack_StackVM_interpret(JNIEnv *env, jobject jsqueak) {
   JNIEnv *oldEnv = CogEnv;
   jobject *oldCog = CogVM;
-  //dprintf(7, "Interpret Enter\n");
+  dprintf(7, "Interpret Enter\n");
   CogEnv = env;
   CogVM = jsqueak;
   int rc = interp_run();
   CogEnv = oldEnv;
   CogVM = oldCog;
-  //dprintf(7, "Interpret Leave\n");
+  dprintf(7, "Interpret Leave\n");
   return rc;
 }
 
@@ -322,7 +322,7 @@ Java_org_pharo_stack_StackVM_sendEvent(JNIEnv *env, jobject self, int
 					   int arg3, int arg4, int arg5,
 					   int arg6, int arg7, int arg8) {
 
-//dprintf(7, "sendEvent type=%d\n", type);
+	dprintf(7, "sendEvent type=%d\n", type);
     int empty = iebEmptyP();
     switch(type) {
 	case 1:				/* mouse/touch event, arg3=x, arg4=y, arg5=buttons */
@@ -330,7 +330,7 @@ Java_org_pharo_stack_StackVM_sendEvent(JNIEnv *env, jobject self, int
 	    mousePosition.y = arg4;
             buttonState = arg5;
 	    recordMouseEvent();
-//dprintf(7, "mouse x=%d y=%d %d\n", arg3, arg4, arg5);
+	dprintf(7, "mouse x=%d y=%d %d\n", arg3, arg4, arg5);
 	    break;
 	case 2:				/* keyboard input, arg3=charCode, arg5=mods, arg6=ucs4 */
 	    recordKeyboardEvent(arg3, arg4, arg5, arg6);
@@ -415,7 +415,7 @@ Java_org_pharo_stack_StackVM_setImagePath(JNIEnv *env, jobject self,
   chdir(dir);
   strcpy(fakeExe, dir);
   strcat(fakeExe, "/");
-  strcat(fakeExe, "cogvm");
+  strcat(fakeExe, "pharos");
   int maximgarg = 128;
   char *imgargv[maximgarg];
   int imgargc = splitcmd(cmdd, maximgarg, imgargv);
@@ -433,11 +433,12 @@ for(z = 0; z < imgargc; z++)
 for(z = 0; z < argl; z++)
 	dprintf(9, "argc [%d]: %s\n", z, argc[z]);
   int rc = interp_init(argl - 1, argc, envp);
-dprintf(5, "after interp_init\n");
+	dprintf(5, "after interp_init\n");
   (*env)->ReleaseStringUTFChars(env, imageName_, imgpath);
   (*env)->ReleaseStringUTFChars(env, cmd_, cmd);
   jclass cls = (*env)->GetObjectClass(env, self);
   sqInvalidate = (*env)->GetMethodID(env, cls, "invalidate", "(IIII)V");
+  dprintf(5, "ImagePathOut\n");
   return rc;
 }
 
@@ -574,7 +575,9 @@ static sqInt display_ioGLinitialise(void) { trace();  return 0; }
 static sqInt display_ioGLcreateRenderer(glRenderer *r, sqInt x, sqInt y, sqInt w, sqInt h, sqInt flags) { trace();  return 0; }
 static void  display_ioGLdestroyRenderer(glRenderer *r) { trace(); }
 static void  display_ioGLswapBuffers(glRenderer *r) { trace(); }
-static sqInt display_ioGLmakeCurrentRenderer(glRenderer *r) { trace();  return 0; }
+static sqInt display_ioGLmakeCurrentRenderer(glRenderer *r) { 
+	dprintf(5, "In makeCurrent\n");
+	trace();  return 0; }
 static void  display_ioGLsetBufferRect(glRenderer *r, sqInt x, sqInt y, sqInt w, sqInt h) { trace(); }
 
 static char *display_winSystemName(void)
