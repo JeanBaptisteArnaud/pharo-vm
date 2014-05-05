@@ -1353,13 +1353,13 @@ void interpStats(void)
   dprintf(1, "Interpreter entered: %d times\n", interpcnt);
   dprintf(1, "Alarm timer (T), msec: %d\n", ALARM_MS);
   dprintf(1, "Exited by alarm: %d times\n", alarmcnt);
-  dprintf(1, "Interpreter times, msec (min avg max): %ld, %ld, %ld\n", 
-    interpmin, interpmsecs / interpcnt, interpmax);
-  dprintf(1, "Longer than 1.5 * T: %d times\n", gt1dot5);
-  dprintf(1, "Longer than 2.0 * T: %d times\n", gt2dot0);
-  dprintf(1, "Longer than 2.5 * T: %d times\n", gt2dot5);
-  dprintf(1, "Host times, msec (min avg max): %ld, %ld, %ld\n", 
-    hostmin, hostmsecs / hostcnt, hostmax);
+  //dprintf(1, "Interpreter times, msec (min avg max): %ld, %ld, %ld\n", 
+  //  interpmin, interpmsecs / interpcnt, interpmax);
+  //dprintf(1, "Longer than 1.5 * T: %d times\n", gt1dot5);
+  //dprintf(1, "Longer than 2.0 * T: %d times\n", gt2dot0);
+  //dprintf(1, "Longer than 2.5 * T: %d times\n", gt2dot5);
+  //dprintf(1, "Host times, msec (min avg max): %ld, %ld, %ld\n", 
+  // hostmin, hostmsecs / hostcnt, hostmax);
 }
 
 int ioExit(void) { return ioExitWithErrorCode(0); }
