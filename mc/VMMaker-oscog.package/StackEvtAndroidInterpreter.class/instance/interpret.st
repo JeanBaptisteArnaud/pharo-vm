@@ -20,7 +20,9 @@ interpret
 	self internalizeIPandSP.
 	self fetchNextBytecode.
 	self cCode: 'jniputstr("loop /n")'.
-	[true] whileTrue: [self dispatchOn: currentBytecode in: BytecodeTable].
+	[true] whileTrue: [
+	self cCode: 'jniputlong(currentBytecode)'.
+	self dispatchOn: currentBytecode in: BytecodeTable].
 	localIP := localIP - 1.  "undo the pre-increment of IP before returning"
 	self externalizeIPandSP.
 	^1	"return 1 if normal VM termination"

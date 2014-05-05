@@ -142,6 +142,12 @@ void jniputstr(char *s) {
   	sdprintf(9, "%s", s);
 }
 
+void jniputlong(long i) {
+  	sdprintf(9, "%ld", (long)i);
+}
+
+
+
 /*
  * Find a method with given name, signature, class.
  * Uses the saved environment.
