@@ -90,14 +90,6 @@ void jniputchar(char c) {
  * jniputstr: put a string, buffered. Once buffer is full, jnilog the buffer.
  */
 
-void jniputstr(char *s) {
-  for(; *s; s++) jniputchar(*s);
-}
-
-/*
- * jprintf: format a string and put it to the jni log.
- */
-
 void jprintf(const char *fmt, ...) {
   va_list args;
   va_start(args, fmt);
@@ -129,6 +121,25 @@ int dprintf(int logLvl, const char *fmt, ...) {
   }
   va_end(args);
   return result;
+}
+
+int sdprintf(int logLvl, const char *fmt, ...) {
+  int result;
+  va_list args;
+  va_start(args, fmt);
+  if(logLvl <= vmLogLevel) {
+	result = __android_log_vprint(ANDROID_LOG_INFO, "Smalltalk", fmt, args);
+	char str[10000];
+	vsnprintf(str, 9999, fmt, args);
+	jnilog(str);
+  }
+  va_end(args);
+  return result;
+}
+
+
+void jniputstr(char *s) {
+  	sdprintf(9, "%s", s);
 }
 
 /*
