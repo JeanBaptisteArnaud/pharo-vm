@@ -16,12 +16,14 @@ interpret
 		self cCode: 'setjmp(jmpBufExit)' 
 				inSmalltalk:[jmpBufExit := [^self]. 
 					0].
+
 	result = 0 ifFalse:[^0].	"return 0 when suspended for an event"
 	self internalizeIPandSP.
 	self fetchNextBytecode.
 	self cCode: 'jniputstr("loop /n")'.
 	[true] whileTrue: [
 	self cCode: 'jniputlong(currentBytecode)'.
+	self printOop: (self receiver). 
 	self dispatchOn: currentBytecode in: BytecodeTable].
 	localIP := localIP - 1.  "undo the pre-increment of IP before returning"
 	self externalizeIPandSP.
