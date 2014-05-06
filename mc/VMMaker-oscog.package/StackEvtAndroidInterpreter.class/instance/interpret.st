@@ -8,23 +8,27 @@ interpret
 	self cCode: 'jniputstr("interpret In /n")'.
 	stackLimit = 0 ifTrue:
 		[^self initStackPagesAndInterpret].
-	self cCode: 'jniputstr("interpret In 1 /n")'.
+	self cCode: 'jniputstr("interpret")'.
 	"record entry time when running as a browser plug-in"
 	self browserPluginInitialiseIfNeeded.
 	"set up a jmp_buf to bail out when no processes are ready to run"
 	result := 
 		self cCode: 'setjmp(jmpBufExit)' 
-				inSmalltalk:[jmpBufExit := [^self]. 
+				inSmalltalk:[jmpBufExit := [
+						self cCode: 'jniputstr("jmpBufExit called")'.
+						^self]. 
 					0].
 
-	result = 0 ifFalse:[^0].	"return 0 when suspended for an event"
+	result = 0 ifFalse:[
+	self cCode: 'jniputstr("result = 0")'.
+		^0].
 	self internalizeIPandSP.
 	self fetchNextBytecode.
-	self cCode: 'jniputstr("loop /n")'.
+	self cCode: 'jniputstr("B loop")'.
 	[true] whileTrue: [
 	self cCode: 'jniputlong(currentBytecode)'.
-	self printOop: (self receiver). 
 	self dispatchOn: currentBytecode in: BytecodeTable].
 	localIP := localIP - 1.  "undo the pre-increment of IP before returning"
+	self cCode: 'jniputstr("B externalizeIPandSP")'.
 	self externalizeIPandSP.
 	^1	"return 1 if normal VM termination"
