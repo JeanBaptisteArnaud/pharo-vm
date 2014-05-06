@@ -1,5 +1,7 @@
 debug printing
-printNum: n
+printNum: l
 	"For testing in Smalltalk, this method should be overridden in a subclass."
+	<api>
+	<var: #l type: #'long'>
+	self cCode: 'jniputlong(l)'.
 	
-	self cCode: 'jprintf("%ld", (long) n)'.

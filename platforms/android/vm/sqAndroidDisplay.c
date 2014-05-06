@@ -114,7 +114,7 @@ int dprintf(int logLvl, const char *fmt, ...) {
   va_list args;
   va_start(args, fmt);
   if(logLvl <= vmLogLevel) {
-	result = __android_log_vprint(ANDROID_LOG_INFO, "PharoVMLog C files", fmt, args);
+	result = __android_log_vprint(ANDROID_LOG_INFO, "PharoVM", fmt, args);
 	char str[10000];
 	vsnprintf(str, 9999, fmt, args);
 	jnilog(str);
