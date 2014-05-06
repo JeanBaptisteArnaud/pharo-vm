@@ -25,6 +25,6 @@ initStackPagesAndInterpret
 	"Once the stack pages are initialized we can continue to bootstrap the system."
 	self loadInitialContext.
 	"We're ready for the heartbeat (poll interrupt)"
-	self ioInitHeartbeat.
+	"self ioInitHeartbeat."
 	self interpret.
 	^nil
