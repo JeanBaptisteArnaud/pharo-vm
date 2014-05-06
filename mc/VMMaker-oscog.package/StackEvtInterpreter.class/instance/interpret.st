@@ -18,6 +18,7 @@ interpret
 	result = 0 ifFalse:[^0].	"return 0 when suspended for an event"
 	self internalizeIPandSP.
 	self fetchNextBytecode.
+	self initExtensions.
 	[true] whileTrue: [self dispatchOn: currentBytecode in: BytecodeTable].
 	localIP := localIP - 1.  "undo the pre-increment of IP before returning"
 	self externalizeIPandSP.
