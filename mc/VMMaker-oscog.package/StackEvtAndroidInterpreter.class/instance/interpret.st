@@ -12,9 +12,7 @@ interpret
 	"set up a jmp_buf to bail out when no processes are ready to run"
 	result := 
 		self cCode: 'setjmp(jmpBufExit)' 
-				inSmalltalk:[jmpBufExit := [
-						^self]. 
-					0].
+				inSmalltalk: [jmpBufExit := [^self].0].
 
 	result = 0 ifFalse:[^0].
 	self internalizeIPandSP.
@@ -22,6 +20,7 @@ interpret
 	self initExtensions.
 
 	[true] whileTrue: [
+	self cCode: 'jniputlong(currentBytecode)'.
 	self dispatchOn: currentBytecode in: BytecodeTable].
 	localIP := localIP - 1.  "undo the pre-increment of IP before returning"
 	self externalizeIPandSP.

@@ -2,7 +2,8 @@
 	"class" : {
 		 },
 	"instance" : {
-		"interpret" : "jb 5/6/2014 16:43",
+		"fetchNextBytecode" : "jb 5/6/2014 18:15",
+		"interpret" : "jb 5/6/2014 18:13",
 		"isBigEnder" : "golubovsky 7/31/2011 13:21",
 		"preambleCCode" : "golubovsky 8/22/2011 22:29",
 		"print:" : "golubovsky 8/22/2011 06:37",
