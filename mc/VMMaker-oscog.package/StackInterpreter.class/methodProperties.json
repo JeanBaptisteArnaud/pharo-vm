@@ -612,7 +612,7 @@
 		"sendInvokeCallback:Stack:Registers:Jmpbuf:" : "eem 2/16/2011 15:22",
 		"sendInvokeCallbackContext:" : "eem 7/12/2011 14:17",
 		"sendLiteralSelector0ArgsBytecode" : "eem 10/31/2012 11:52",
-		"sendLiteralSelector1ArgBytecode" : "eem 10/31/2012 11:52",
+		"sendLiteralSelector1ArgBytecode" : "jb 5/6/2014 22:36",
 		"sendLiteralSelector2ArgsBytecode" : "eem 10/31/2012 11:52",
 		"setBreakSelector:" : "eem 3/19/2009 09:22",
 		"setCogVMFlags:" : "eem 4/22/2010 16:05",
