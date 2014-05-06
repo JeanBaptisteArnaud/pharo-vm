@@ -8,7 +8,7 @@ interpret
 	self cCode: 'jniputstr("interpret In /n")'.
 	stackLimit = 0 ifTrue:
 		[^self initStackPagesAndInterpret].
-	self cCode: 'jniputstr("interpret")'.
+	self cCode: 'jniputstr("interpret")'. 
 	"record entry time when running as a browser plug-in"
 	self browserPluginInitialiseIfNeeded.
 	"set up a jmp_buf to bail out when no processes are ready to run"
