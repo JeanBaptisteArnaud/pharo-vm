@@ -73,18 +73,6 @@ void jnilog(char *str) {
 static char logbuf[LOGLEN];
 static int loglen = 0;
 
-/*
- * jniputchar: put a single character, buffered. Once buffer is full, jnilog the buffer.
- */
-
-void jniputchar(char c) {
-  logbuf[loglen++] = c;
-  if((loglen >= LOGLEN - 2) || (c == '\n')) {
-    jnilog(logbuf);
-    memset(logbuf, 0, LOGLEN);
-    loglen = 0;
-  }
-}
 
 /*
  * jniputstr: put a string, buffered. Once buffer is full, jnilog the buffer.
