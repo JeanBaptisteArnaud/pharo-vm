@@ -2,7 +2,7 @@ debug printing
 methodArg: index
 	"Like #stackValue: but access method arguments left-to-right"
 	index > argumentCount + 1 ifTrue:[
-		self cCode: 'jprintf("[VM]: Attempt to access method args beyond range\n")'.
+		self print: '[VM]: Attempt to access method args beyond range'.
 		self printCallStack.
 		self primitiveFail.
 		^0].

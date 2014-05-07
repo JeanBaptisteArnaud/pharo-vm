@@ -7,6 +7,7 @@ sendLiteralSelector1ArgBytecode
 	rcvr := self internalStackValue: 1.
 	self printOop: rcvr.
 	self printOop: messageSelector.
+	self methodArg: 1.
 	lkupClass := objectMemory fetchClassOf: rcvr.
 	self assert: lkupClass ~= objectMemory nilObject.
 	self commonSend
