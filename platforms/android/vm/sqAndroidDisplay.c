@@ -147,7 +147,7 @@ void jniputlong(long i) {
 }
 
 void jniputchar(char s) {
-  	sdprintf(9, "%c", s);
+  	sdprintf(9, "here is a Char: %c", s);
 }
 
 
