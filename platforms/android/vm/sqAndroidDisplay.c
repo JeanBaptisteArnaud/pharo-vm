@@ -146,6 +146,9 @@ void jniputlong(long i) {
   	sdprintf(9, "%ld", (long)i);
 }
 
+void jniputchar(char s) {
+  	sdprintf(9, "%c", s);
+}
 
 
 /*
