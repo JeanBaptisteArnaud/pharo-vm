@@ -50,6 +50,7 @@ internalActivateNewMethod
 	localSP < stackLimit ifTrue:
 		[self print:'bad things happen'.
 		self externalizeIPandSP.
+		self print:'Wow for real ?'.
 		 self handleStackOverflowOrEventAllowContextSwitch: (self canContextSwitchIfActivating: newMethod header: methodHeader).
 		 self internalizeIPandSP].
 	
