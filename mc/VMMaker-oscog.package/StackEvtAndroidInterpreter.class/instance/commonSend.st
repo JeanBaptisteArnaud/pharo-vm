@@ -8,11 +8,9 @@ commonSend
 	self sendBreak: messageSelector + BaseHeaderSize
 		point: (objectMemory lengthOf: messageSelector)
 		receiver: (self internalStackValue: argumentCount).
-	self print: '-1-'.
 	"self printSends ifTrue:
 		[self printActivationNameForSelector: messageSelector startClass: lkupClass; cr]."
 	self internalFindNewMethod.
-	self print: '-2-'.
+	"here is the problem --->"
 	self internalExecuteNewMethod.
-	self print: '-3-'.
 	self fetchNextBytecode
