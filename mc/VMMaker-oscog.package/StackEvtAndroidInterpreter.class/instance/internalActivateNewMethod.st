@@ -47,10 +47,13 @@ internalActivateNewMethod
 	self assert: (self frameHasContext: localFP) not.
 
 	"Now check for stack overflow or an event (interrupt, must scavenge, etc)."
-	localSP < stackLimit ifTrue:
+	self printNum: localSP.
+	self print:'<'.
+	self printNum: stackLimit.
+	"localSP < stackLimit ifTrue:
 		[self print:'bad things happen'.
 		self externalizeIPandSP.
 		self print:'Wow for real ?'.
 		 self handleStackOverflowOrEventAllowContextSwitch: (self canContextSwitchIfActivating: newMethod header: methodHeader).
-		 self internalizeIPandSP].
+		 self internalizeIPandSP]."
 	
