@@ -75,9 +75,7 @@ extern int useMmap;
 /* Since Cog needs to make memory executable via mprotect, and since mprotect
  * only works on mmapped memory we must always use mmap in Cog.
  */
-#if COGVM
 # define ALWAYS_USE_MMAP 1
-#endif
 
 void *uxAllocateMemory(sqInt minHeapSize, sqInt desiredHeapSize);
 char *uxGrowMemoryBy(char *oldLimit, sqInt delta);
