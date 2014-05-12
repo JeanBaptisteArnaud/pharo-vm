@@ -17,6 +17,7 @@ divorceFramesIn: aStackPage
 	theSP := aStackPage headSP.
 	
 	self print: '123e1dasdac sdivnoimopkj'.
+	self printNum: theSP.
 	theIP := stackPages longAt: theSP.
 	
 	self print: '123e1dasdac sdivnoimopkjvubninjjk'.
