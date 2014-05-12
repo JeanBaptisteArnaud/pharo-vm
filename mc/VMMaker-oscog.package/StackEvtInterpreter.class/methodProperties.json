@@ -4,5 +4,4 @@
 	"instance" : {
 		"callbackEnter:" : "jb 5/6/2014 17:03",
 		"initStackPagesAndInterpret" : "jb 5/6/2014 17:20",
-		"interpret" : "jb 5/6/2014 16:25",
-		"primitiveRelinquishProcessor" : "golubovsky 7/19/2011 22:59" } }
+		"primitiveRelinquishProcessor" : "jb 5/12/2014 17:52" } }

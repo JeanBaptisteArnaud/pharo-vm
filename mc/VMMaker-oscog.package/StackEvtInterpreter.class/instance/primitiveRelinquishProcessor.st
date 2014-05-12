@@ -4,7 +4,7 @@ primitiveRelinquishProcessor
 	ioRelinquishProcessor at all; instead it long jumps to the interpreter's jump target and
 	exits to the host program. The interpreter will be reentered on the next event either
 	user-induced or by timer"
-
+	<var: #jmpBufExit type: #'jmp_buf'>
 	| microSecs |
 	microSecs := self stackIntegerValue: 0.
 	"DO NOT allow relinquishing the processor while we are profiling since this

@@ -8,9 +8,5 @@
 # define UNIX
 #endif
 
-/* Define host endianness dynamically */
-
-extern int bigEndian;
-
-#define VMBIGENDIAN (bigEndian)
+#define VMBIGENDIAN 0
 
