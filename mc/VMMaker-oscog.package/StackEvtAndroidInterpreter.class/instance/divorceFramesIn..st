@@ -46,4 +46,4 @@ divorceFramesIn: aStackPage
 
 	self print: '123esadas1d'.
 	"The page is now free; mark it so."
-	aStackPage baseFP: 0s
+	aStackPage baseFP: 0
