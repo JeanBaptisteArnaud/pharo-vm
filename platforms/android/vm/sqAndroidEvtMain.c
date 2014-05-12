@@ -42,7 +42,7 @@
 #include "sqaio.h"
 #include "sqAndroidCharConv.h"
 #include "debug.h"
-#include "smpjmp.h"
+#include "setjmp.h"
 
 #ifdef ioMSecs
 # undef ioMSecs
