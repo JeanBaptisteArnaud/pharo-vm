@@ -9,7 +9,9 @@ newStackPage
 	<var: #lruOrFree type: #'StackPage *'>
 	<returnTypeC: #'StackPage *'>
 	lruOrFree := stackPages mostRecentlyUsedPage nextPage.
+	self print:'asd'.
 	(stackPages isFree: lruOrFree) ifTrue:
 		[^lruOrFree].
+	self print:'asd2'.
 	self divorceFramesIn: lruOrFree.
 	^lruOrFree
