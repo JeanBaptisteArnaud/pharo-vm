@@ -287,7 +287,6 @@ sqInt sqMemoryExtraBytesLeft(sqInt includingSwap)			{ return uxMemoryExtraBytesL
 
 #endif
 
-#if COGVM
 # define roundDownToPageBoundary(v) ((v)&pageMask)
 # define roundUpToPageBoundary(v) (((v)+pageSize-1)&pageMask)
 void
@@ -309,7 +308,6 @@ sqMakeMemoryNotExecutableFromTo(unsigned long startAddr, unsigned long endAddr)
 				 PROT_READ | PROT_WRITE) < 0)
 		perror("mprotect(x,y,PROT_READ | PROT_WRITE)");
 }
-#endif /* COGVM */
 
 
 #if defined(TEST_MEMORY)
