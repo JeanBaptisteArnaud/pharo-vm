@@ -1,3 +1,0 @@
-object representation
-isSmallIntegerTagNonZero
-	^true

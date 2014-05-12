@@ -1,3 +1,0 @@
-trampolines
-cPICMissTrampolineFor: numArgs
-	^ceCPICMissTrampoline

@@ -1,3 +1,0 @@
-accessing
-cPICNumCases
-	^self stackCheckOffset

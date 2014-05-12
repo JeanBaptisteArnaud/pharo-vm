@@ -1,4 +1,0 @@
-disassembly
-cogCodeBase
-	<api>
-	^codeBase

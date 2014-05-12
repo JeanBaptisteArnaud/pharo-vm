@@ -1,3 +1,0 @@
-printing
-tab
-	coInterpreter tab

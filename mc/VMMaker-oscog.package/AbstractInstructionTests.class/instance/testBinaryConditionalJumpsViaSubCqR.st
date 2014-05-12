@@ -1,5 +1,0 @@
-tests
-testBinaryConditionalJumpsViaSubCqR
-	"self defaultTester testBinaryConditionalJumpsViaSubCqR"
-	"self defaultTester runBinaryConditionalJumpsViaSubCqR: false"
-	self runBinaryConditionalJumpsViaSubCqR: true

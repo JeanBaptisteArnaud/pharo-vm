@@ -1,3 +1,0 @@
-accessing
-endOfMemory
-	^endOfMemory

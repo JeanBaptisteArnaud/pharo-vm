@@ -1,4 +1,0 @@
-private
-ptrAddress
-
-	^ arrayBaseAddress + ptrOffset

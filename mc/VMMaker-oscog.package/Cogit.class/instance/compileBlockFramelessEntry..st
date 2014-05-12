@@ -1,3 +1,0 @@
-compile abstract instructions
-compileBlockFramelessEntry: blockStart
-	self subclassResponsibility

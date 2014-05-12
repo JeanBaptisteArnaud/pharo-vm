@@ -1,3 +1,0 @@
-accessing
-statNumGCs
-	^statIncrGCs + statFullGCs

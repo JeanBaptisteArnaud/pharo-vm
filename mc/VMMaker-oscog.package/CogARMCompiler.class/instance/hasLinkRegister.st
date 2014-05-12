@@ -1,3 +1,0 @@
-testing
-hasLinkRegister
-	^true "lr"

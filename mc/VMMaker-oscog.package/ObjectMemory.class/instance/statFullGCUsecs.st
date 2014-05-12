@@ -1,3 +1,0 @@
-accessing
-statFullGCUsecs
-	^statFullGCUsecs

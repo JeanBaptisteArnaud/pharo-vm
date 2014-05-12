@@ -1,3 +1,0 @@
-accessing
-numIntRegArgs
-	^NumIntRegArgs

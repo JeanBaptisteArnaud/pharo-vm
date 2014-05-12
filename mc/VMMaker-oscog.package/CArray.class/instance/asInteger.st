@@ -1,4 +1,0 @@
-converting
-asInteger
-
-	^ self ptrAddress

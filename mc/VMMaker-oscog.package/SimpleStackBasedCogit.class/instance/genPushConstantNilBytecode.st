@@ -1,3 +1,0 @@
-bytecode generators
-genPushConstantNilBytecode
-	^self genPushLiteral: objectMemory nilObject

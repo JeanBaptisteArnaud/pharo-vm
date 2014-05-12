@@ -1,3 +1,0 @@
-translation
-sourceFileName
-	^'cogit.c'

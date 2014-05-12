@@ -1,3 +1,0 @@
-debug printing
-printSends
-	^false

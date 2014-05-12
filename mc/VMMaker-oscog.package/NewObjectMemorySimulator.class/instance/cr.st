@@ -1,3 +1,0 @@
-printing
-cr
-	^coInterpreter cr

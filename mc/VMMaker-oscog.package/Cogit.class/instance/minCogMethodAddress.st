@@ -1,4 +1,0 @@
-debugging
-minCogMethodAddress
-	<api>
-	^methodZoneBase

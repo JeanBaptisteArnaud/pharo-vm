@@ -1,3 +1,0 @@
-garbage collection
-allYoungObjectsAgeInFullGC
-	^true

@@ -1,3 +1,0 @@
-other
-getInterruptPending
-	^self notYetImplementedError

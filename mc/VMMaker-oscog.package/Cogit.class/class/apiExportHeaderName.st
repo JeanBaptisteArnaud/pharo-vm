@@ -1,3 +1,0 @@
-translation
-apiExportHeaderName
-	^'cogit.h'

@@ -1,4 +1,0 @@
-simulation
-isThreadedVM
-	<doNotGenerate>
-	^false

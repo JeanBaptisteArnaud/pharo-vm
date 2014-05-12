@@ -1,3 +1,0 @@
-allocating
-allocateStackFillEntry
-	^self wbStackPush: self stackFillEntryLength

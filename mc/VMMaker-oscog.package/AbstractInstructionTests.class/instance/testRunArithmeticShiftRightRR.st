@@ -1,4 +1,0 @@
-tests
-testRunArithmeticShiftRightRR
-	"self defaultTester testRunArithmeticShiftRightRR"
-	self runArithmeticShiftRightRR: true

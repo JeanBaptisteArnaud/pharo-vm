@@ -1,3 +1,0 @@
-bytecode generators
-unknownBytecode
-	^EncounteredUnknownBytecode

@@ -1,3 +1,0 @@
-simulation
-showDisplayBits
-	"Do nothing."

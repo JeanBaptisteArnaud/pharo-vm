@@ -1,3 +1,0 @@
-UI access
-internalModules
-	^internalPlugins

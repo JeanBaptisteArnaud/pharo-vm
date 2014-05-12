@@ -1,3 +1,0 @@
-other
-majorVersion
-	self notYetImplemented

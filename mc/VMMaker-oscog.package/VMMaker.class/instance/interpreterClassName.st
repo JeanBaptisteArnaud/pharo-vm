@@ -1,4 +1,0 @@
-generate sources
-interpreterClassName
-
-	^interpreterClassName

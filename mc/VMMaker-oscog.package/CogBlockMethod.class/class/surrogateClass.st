@@ -1,3 +1,0 @@
-accessing
-surrogateClass
-	self shouldNotImplement

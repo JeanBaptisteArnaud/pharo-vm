@@ -1,3 +1,0 @@
-accessing
-gcBiasToGrowGCLimit
-	^gcBiasToGrowGCLimit

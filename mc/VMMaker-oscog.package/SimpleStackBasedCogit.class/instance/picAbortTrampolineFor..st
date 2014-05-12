@@ -1,3 +1,0 @@
-trampolines
-picAbortTrampolineFor: numArgs
-	^cePICAbortTrampoline

@@ -1,4 +1,0 @@
-simulation
-threadManager
-	<doNotGenerate>
-	^nil

@@ -1,3 +1,0 @@
-exceptionDescription
-isResumable
-	^true

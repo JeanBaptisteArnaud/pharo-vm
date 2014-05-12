@@ -1,1 +1,0 @@
-These tests require VMMaker and should be considered part of it.

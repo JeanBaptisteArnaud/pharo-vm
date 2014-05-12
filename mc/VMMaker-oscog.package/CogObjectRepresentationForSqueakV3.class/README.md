@@ -1,1 +1,0 @@
-Read my superclass' class comment.  I am a CogObjectRepresentation for the Squeak V3 object representation.

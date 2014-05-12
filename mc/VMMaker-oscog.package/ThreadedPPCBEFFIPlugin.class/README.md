@@ -1,1 +1,0 @@
-This subclass is for the PowerPC ABI in BigEndian mode.  It typically uses 8 integer registers and 8 single-precision floating-point registers that shadow the top 8 words on the stack.

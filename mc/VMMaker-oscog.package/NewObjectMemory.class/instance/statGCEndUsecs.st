@@ -1,3 +1,0 @@
-accessing
-statGCEndUsecs
-	^statGCEndUsecs

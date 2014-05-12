@@ -1,3 +1,0 @@
-accessing
-jumpShortByteSize
-	^2

@@ -1,4 +1,0 @@
-accessing
-backfillFloatRegisterIndex
-
-	^ backfillFloatRegisterIndex

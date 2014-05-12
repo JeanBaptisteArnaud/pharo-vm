@@ -1,3 +1,0 @@
-explorer
-explorerContents
-	^nil

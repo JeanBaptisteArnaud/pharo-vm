@@ -1,3 +1,0 @@
-interpreter access
-baseHeaderSize
-	^BaseHeaderSize

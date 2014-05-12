@@ -1,4 +1,0 @@
-accessing
-objectMemory
-	<doNotGenerate>
-	^objectMemory

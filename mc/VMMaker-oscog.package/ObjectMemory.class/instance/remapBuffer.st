@@ -1,3 +1,0 @@
-accessing
-remapBuffer
-	^remapBuffer

@@ -1,4 +1,0 @@
-simulation
-thisClassIndex
-	<doNotGenerate>
-	^thisClassIndex

@@ -1,4 +1,0 @@
-process primitive support
-checkCogCompiledCodeCompactionCalledFor
-	cogCompiledCodeCompactionCalledFor ifTrue:
-		[self commenceCogCompiledCodeCompaction]

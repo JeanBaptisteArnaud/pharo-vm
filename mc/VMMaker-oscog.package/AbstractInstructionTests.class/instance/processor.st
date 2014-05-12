@@ -1,3 +1,0 @@
-generating machine code
-processor
-	self subclassResponsibility

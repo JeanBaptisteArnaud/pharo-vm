@@ -1,4 +1,0 @@
-debugging
-sendTrace
-	<doNotGenerate>
-	^traceFlags

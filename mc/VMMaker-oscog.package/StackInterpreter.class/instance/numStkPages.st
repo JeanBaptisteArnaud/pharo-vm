@@ -1,3 +1,0 @@
-stack pages
-numStkPages
-	^numStackPages

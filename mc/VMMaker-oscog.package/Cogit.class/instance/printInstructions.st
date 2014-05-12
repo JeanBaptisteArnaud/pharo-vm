@@ -1,4 +1,0 @@
-disassembly
-printInstructions
-	<doNotGenerate>
-	^printInstructions

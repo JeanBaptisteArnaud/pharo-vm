@@ -1,3 +1,0 @@
-allocation
-sufficientSpaceToInstantiate: classObj indexableSize: indexableFields
-	self shouldNotImplement
