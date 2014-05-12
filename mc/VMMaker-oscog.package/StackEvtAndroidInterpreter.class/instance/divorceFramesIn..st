@@ -7,12 +7,22 @@ divorceFramesIn: aStackPage
 	<var: #calleeFP type: #'char *'>
 	<var: #theSP type: #'char *'>
 
+	self print: '123e1dvdfsvfdvdfwdw,l'.
 	statStackPageDivorce := statStackPageDivorce + 1.
-
+	
+	self print: '123e1d12e112e'.
 	theFP := aStackPage headFP.
+	
+	self print: '123e1dsadasvc fd'.
 	theSP := aStackPage headSP.
+	
+	self print: '123e1dasdac sdivnoimopkj'.
 	theIP := stackPages longAt: theSP.
+	
+	self print: '123e1dasdac sdivnoimopkjvubninjjk'.
 	theSP := theSP + BytesPerWord. "theSP points at hottest item on frame's stack"
+	
+	self print: '123e1dasdac sdivndasdasoimopkj'.
 	calleeContext := nil.
 	self print: '123e1d'.
 	[theContext := self ensureFrameIsMarried: theFP SP: theSP.
