@@ -39,7 +39,6 @@
 #undef sqShrinkMemoryBy
 #undef sqMemoryExtraBytesLeft
 
-#include <jni.h>
 #include "sqMemoryAccess.h"
 
 extern sqInt sqAllocateMemory(sqInt minHeapSize, sqInt desiredHeapSize);
@@ -53,18 +52,13 @@ extern void sqMakeMemoryExecutableFromTo(unsigned long, unsigned long);
 extern void sqMakeMemoryNotExecutableFromTo(unsigned long, unsigned long);
 
 extern int isCFramePointerInUse(void);
+extern int osCogStackPageHeadroom(void);
+extern void reportMinimumUnusedHeadroom(void);
 #endif
 
-/* Check if an alarm has occurred, and bail out of the interpreter so it does not
- * run too long, keep us responsive (ALARM_MS is how long an interpreter can run
- */
+#define sqImageFileReadEntireImage(memoryAddress, elementSize,  length, fileStream) \
+	sqImageFileRead(memoryAddress, elementSize,  length, fileStream)
 
-extern int alarmed;
-
-#undef browserPluginReturnIfNeeded
-#define browserPluginReturnIfNeeded() if(alarmed) longjmp(jmpBufExit, 1)
-
-#define ALARM_MS 200
 
 /* warnPrintf is provided (and needed) on the win32 platform.
  * But it may be mentioned elsewhere, so provide a suitable def.
@@ -147,28 +141,3 @@ extern void sqFilenameFromString(char *uxName, sqInt stNameIndex, int sqNameLeng
 # undef VM_LABEL
 # define VM_LABEL(foo) 0
 #endif
-
-/* Few definitions to avoid linking whole modules that would not be functional anyway */
-
-#define get64(variable) variable
-#define set64(variable,value) (variable = value)
-
-int isBigEndian(void);
-extern int bigEndian;
-
-jmethodID getMethodwithSiginClass(char *mtdname, char *mtdsig, jclass cls);
-jobject getVMObject(void);
-jclass getVMClass(void);
-jstring asJavaString(char *bytes);
-jbyteArray asJavaByteArray(void *arr, jsize length);
-int callIntMethodOnwith(jmethodID, jobject, ...);
-void callVoidMethodOnwith(jmethodID, jobject, ...);
-char *callStringMethodOnwith(jmethodID, jobject, ...);
-#define callVoidMethodOnwithmanyargs callVoidMethodOnwith
-
-#define sqImageFileReadEntireImage(memoryAddress, elementSize,  length, fileStream) \
-	sqImageFileRead(memoryAddress, elementSize,  length, fileStream)
-
-
-#define bytesPerWord() sizeof(int)
-

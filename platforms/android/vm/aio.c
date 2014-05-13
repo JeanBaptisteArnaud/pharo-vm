@@ -74,6 +74,11 @@
 #   endif
 # endif
 
+# if __sun__
+  # include <sys/sockio.h>
+  # define signal(a, b) sigset(a, b)
+# endif
+
 #else /* !HAVE_CONFIG_H -- assume lowest common demoninator */
 
 # include <stdio.h>
@@ -89,7 +94,7 @@
 
 #endif
 
-//#define DEBUG
+
 #undef	DEBUG
 
 #if defined(DEBUG)
@@ -101,8 +106,6 @@
 #endif
 
 #define _DO_FLAG_TYPE()	do { _DO(AIO_R, rd) _DO(AIO_W, wr) _DO(AIO_X, ex) } while (0)
-
-#define perror(x) fprintf(3, "#x: %s\n", strerror(errno))
 
 static int one= 1;
 
@@ -125,39 +128,26 @@ static void undefinedHandler(int fd, void *clientData, int flags)
   fprintf(stderr, "undefined handler called (fd %d, flags %x)\n", fd, flags);
 }
 
-
+#ifdef DEBUG
 static char *handlerName(aioHandler h)
 {
   if (h == undefinedHandler) return "undefinedHandler";
-
+#ifdef DEBUG_SOCKETS
  {
    extern char *socketHandlerName(aioHandler);
    return socketHandlerName(h);
  }
-
+#endif
  return "***unknown***";
 }
-
-
-/* handle SIGIO here */
-
-void handlesigio(int sig) 
-{
-}
-
-/* handle SIGALRM here */
-
-int alarmed = 0;
-
-void handlealarm(int sig) 
-{
-  alarmed = 1;
-}
+#endif
 
 /* initialise asynchronous i/o */
 
 void aioInit(void)
 {
+  extern void forceInterruptCheck(int);	/* not really, but hey */
+
   FD_ZERO(&fdMask);
   FD_ZERO(&rdMask);
   FD_ZERO(&wrMask);
@@ -165,8 +155,7 @@ void aioInit(void)
   FD_ZERO(&xdMask);
   maxFd= 0;
   signal(SIGPIPE, SIG_IGN);
-  signal(SIGIO, handlesigio);
-  signal(SIGALRM, handlealarm);
+  signal(SIGIO,   forceInterruptCheck);
 }
 
 
@@ -194,29 +183,73 @@ void aioFini(void)
 /* answer whether i/o becomes possible within the given number of microSeconds */
 #define max(x,y) (((x)>(y))?(x):(y))
 
-/*
- * Poll pending I/O operations but do not wait if none is ready. The microSeconds
- * argument is left for compatibility, but is not used.
+long pollpip = 0; /* set in sqUnixMain.c by -pollpip arg */
+#if COGMTVM
+/* If on the MT VM and pollpip > 1 only pip if a threaded FFI call is in
+ * progress, which we infer from disownCount being non-zero.
  */
+extern long disownCount;
+# define SHOULD_TICK() (pollpip == 1 || (pollpip > 1 && disownCount))
+#else
+# define SHOULD_TICK() pollpip
+#endif
+
+static char *ticks= "-\\|/";
+static char *ticker= "";
+static int tickCount = 0;
+#define TICKS_PER_CHAR 10
+#define DO_TICK(bool)				\
+do if ((bool) && !(++tickCount % TICKS_PER_CHAR)) {		\
+	fprintf(stderr, "\r%c\r", *ticker);		\
+	if (!*ticker++) ticker= ticks;			\
+} while (0)
 
 int aioPoll(int microSeconds)
 {
   int	 fd;
   fd_set rd, wr, ex;
+  unsigned long long us;
 
+  FPRINTF((stderr, "aioPoll(%d)\n", microSeconds));
+  DO_TICK(SHOULD_TICK());
+
+  /* get out early if there is no pending i/o and no need to relinquish cpu */
+
+#ifdef TARGET_OS_IS_IPHONE
   if (maxFd == 0)
     return 0;
+#else
+  if ((maxFd == 0) && (microSeconds == 0))
+    return 0;
+#endif
 
   rd= rdMask;
   wr= wrMask;
   ex= exMask;
+  us= ioUTCMicroseconds();
 
-  struct timeval tv;
-  int n;
-  tv.tv_sec=  0;
-  tv.tv_usec= 0;
-  n= select(maxFd, &rd, &wr, &ex, &tv);
-  if (n == 0) return 0;
+  for (;;)
+    {
+      struct timeval tv;
+      int n;
+      unsigned long long now;
+      tv.tv_sec=  microSeconds / 1000000;
+      tv.tv_usec= microSeconds % 1000000;
+      n= select(maxFd, &rd, &wr, &ex, &tv);
+      if (n  > 0) break;
+      if (n == 0) return 0;
+      if (errno && (EINTR != errno))
+	{
+	  fprintf(stderr, "errno %d\n", errno);
+	  perror("select");
+	  return 0;
+	}
+      now= ioUTCMicroseconds();
+      microSeconds -= max(now - us,1);
+      if (microSeconds <= 0)
+	return 0;
+      us= now;
+    }
 
   for (fd= 0; fd < maxFd; ++fd)
     {
@@ -243,19 +276,18 @@ int aioPoll(int microSeconds)
 int aioSleepForUsecs(int microSeconds)
 {
 #if defined(HAVE_NANOSLEEP)
-    if (microSeconds < (1000000/60)) 
+  if (microSeconds < (1000000/60))	/* < 1 timeslice? */
     {
-        if (!aioPoll(0)) 
-        {
-            struct timespec rqtp= { 0, microSeconds * 1000 };
-            struct timespec rmtp;
-            nanosleep(&rqtp, &rmtp);
-            microSeconds= 0;			/* poll but don't block */
-        }
+      if (!aioPoll(0))
+	{
+	  struct timespec rqtp= { 0, microSeconds * 1000 };
+	  struct timespec rmtp;
+	  nanosleep(&rqtp, &rmtp);
+	  microSeconds= 0;			/* poll but don't block */
+	}
     }
 #endif
-    
-    return aioPoll(microSeconds);
+  return aioPoll(microSeconds);
 }
 
 
@@ -263,15 +295,15 @@ int aioSleepForUsecs(int microSeconds)
 
 void aioEnable(int fd, void *data, int flags)
 {
-  dprintf(9, "aioEnable(%d)\n", fd);
+  FPRINTF((stderr, "aioEnable(%d)\n", fd));
   if (fd < 0)
     {
-      dprintf(9, "aioEnable(%d): IGNORED\n", fd);
+      FPRINTF((stderr, "aioEnable(%d): IGNORED\n", fd));
       return;
     }
   if (FD_ISSET(fd, &fdMask))
     {
-      dprintf(4, "aioEnable: descriptor %d already enabled\n", fd);
+      fprintf(stderr, "aioEnable: descriptor %d already enabled\n", fd);
       return;
     }
   clientData[fd]= data;
@@ -294,7 +326,6 @@ void aioEnable(int fd, void *data, int flags)
       FD_CLR(fd, &xdMask);
 
 #    if defined(O_ASYNC)
-      dprintf(9, "using O_ASYNC for aio\n");
       if (      fcntl(fd, F_SETOWN, getpid()                  )  < 0)
 		perror("fcntl(F_SETOWN, getpid())");
       if ((arg= fcntl(fd, F_GETFL,  0                         )) < 0)
@@ -303,7 +334,6 @@ void aioEnable(int fd, void *data, int flags)
 		perror("fcntl(F_SETFL, O_ASYNC)");
 
 #    elif defined(FASYNC)
-      dprintf(9, "using FASYNC for aio\n");
       if (      fcntl(fd, F_SETOWN, getpid()                  )  < 0)
 		perror("fcntl(F_SETOWN, getpid())");
       if ((arg= fcntl(fd, F_GETFL,  0                         )) < 0)
@@ -312,15 +342,12 @@ void aioEnable(int fd, void *data, int flags)
 		perror("fcntl(F_SETFL, FASYNC)");
 
 #    elif defined(FIOASYNC)
-      dprintf(9, "using FIOASYNC for aio\n");
       arg= getpid();
 	  if (ioctl(fd, SIOCSPGRP, &arg) < 0)
 		perror("ioctl(SIOCSPGRP, getpid())");
       arg= 1;
 	  if (ioctl(fd, FIOASYNC,  &arg) < 0)
 		perror("ioctl(FIOASYNC, 1)");
-#    else
-      dprintf(2, "AIO not available\n");
 #    endif
     }
 }
@@ -330,10 +357,10 @@ void aioEnable(int fd, void *data, int flags)
 
 void aioHandle(int fd, aioHandler handlerFn, int mask)
 {
-  dprintf(9, "aioHandle(%d, %s, %d)\n", fd, handlerName(handlerFn), mask);
+  FPRINTF((stderr, "aioHandle(%d, %s, %d)\n", fd, handlerName(handlerFn), mask));
   if (fd < 0)
     {
-      dprintf(9, "aioHandle(%d): IGNORED\n", fd);
+      FPRINTF((stderr, "aioHandle(%d): IGNORED\n", fd));
       return;
     }
 # define _DO(FLAG, TYPE)			\
