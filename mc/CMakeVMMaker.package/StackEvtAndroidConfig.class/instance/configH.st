@@ -11,8 +11,8 @@ configH
 
 /* package options */
 
-#define	USE_X11 1
-#define	USE_X11_GLX 1
+// #define	USE_X11 1
+// #define	USE_X11_GLX 1
 /* #undef	USE_QUARTZ */
 /* #undef	USE_QUARTZ_CGL */
 /* #undef	USE_RFB */
@@ -51,12 +51,12 @@ configH
 /* #undef	HAVE_SYS_AUDIOIO_H */
 /* #undef	HAVE_SUN_AUDIOIO_H */
 
-#define	HAVE_PTY_H 1
+//#define	HAVE_PTY_H 1
 /* #undef	HAVE_UTIL_H */
 /* #undef	HAVE_LIBUTIL_H */
-#define	HAVE_STROPTS_H 1
+//#define	HAVE_STROPTS_H 1
 
-#define	HAVE_GL_GL_H 1
+//#define	HAVE_GL_GL_H 1
 /* #undef	HAVE_OPENGL_GL_H */
 
 /* #undef	NEED_SUNOS_H */
@@ -107,10 +107,12 @@ configH
 
 /* architecture */
 
-#define	OS_TYPE "unix"
+#define	OS_TYPE "android"
 #define USE_ARM_REGS 1
-#define	VM_HOST "i686-pc-linux-gnu"
-#define	VM_HOST_CPU "i686"
+#define __arm__ 1
+#define __ARM_ARCH_6__
+#define	VM_HOST "arm-android-gnu"
+#define	VM_HOST_CPU "arm"
 /* #undef	VM_HOST_VENDOR */
 #define	VM_HOST_OS "linux-gnu"
 #define	VM_BUILD_STRING "Unix built on "__DATE__ " "__TIME__" Compiler: "__VERSION__
@@ -132,7 +134,7 @@ configH
 #define VM_VERSION "3.9-7"
 #define VM_MODULE_PREFIX ""
 /* #undef VM_DLSYM_PREFIX */
-#define VM_X11DIR ""
+// #define VM_X11DIR ""
 
 /* avoid dependencies on glibc2.3 */
 
