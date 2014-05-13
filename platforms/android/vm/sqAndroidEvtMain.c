@@ -1147,9 +1147,9 @@ void imgInit(void)
       FILE *f= 0;
       struct stat sb;
       char imageName[MAXPATHLEN];
-dprintf(5, "imgInit %s\n", shortImageName);
+	  dprintf(5, "imgInit %s\n", shortImageName);
       sq2uxPath(shortImageName, strlen(shortImageName), imageName, 1000, 1);
-dprintf(5, "%s %s\n", imageName, shortImageName);
+	  dprintf(5, "%s %s\n", imageName, shortImageName);
       if ((  (-1 == stat(imageName, &sb)))
 	  || ( 0 == (f= fopen(imageName, "r"))))
 	{
