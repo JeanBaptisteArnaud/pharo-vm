@@ -41,6 +41,7 @@
 #include "sqSCCSVersion.h"
 #include "sqUnixMain.h"
 #include "debug.h"
+#include "androidUContext.h"
 
 #ifdef ioMSecs
 # undef ioMSecs
