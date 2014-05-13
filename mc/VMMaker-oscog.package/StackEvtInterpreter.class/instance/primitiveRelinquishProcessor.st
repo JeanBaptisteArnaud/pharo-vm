@@ -12,6 +12,7 @@ primitiveRelinquishProcessor
 	inner idle loop as a busy loop."
 	nextProfileTick = 0 ifTrue:[
 		self pop: 1.  "microSecs; leave rcvr on stack"
+		self print:'Relinquish'.
 		self cCode:'longjmp(jmpBufExit, 1)' 
 				inSmalltalk:[jmpBufExit value].
 	].

@@ -1243,9 +1243,9 @@ int interp_init(int argc, char **argv, char **envp)
 #endif
   parseArguments(argc, argv);
   int x;
-  for(x = 0; x <= squeakArgCnt; x++) {
-      dprintf(9, "sqarg[%d]: %s\n", x, squeakArgVec[x]);
-  }
+ // for(x = 0; x <= squeakArgCnt; x++) {
+ //     dprintf(9, "sqarg[%d]: %s\n", x, squeakArgVec[x]);
+ // }
   dpy = display_android.makeInterface();
   snd = sound_null.makeInterface();
 #if !DEBUG
