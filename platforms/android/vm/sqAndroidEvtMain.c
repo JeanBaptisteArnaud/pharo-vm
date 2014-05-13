@@ -1287,7 +1287,7 @@ int interp_init(int argc, char **argv, char **envp)
 static int hostcnt = 0, interpcnt = 0, alarmcnt = 0, gt1dot5 = 0, gt2dot0 = 0, gt2dot5 = 0;
 static long interpmsecs = 0, interpmax = 0, interpmin = 0xFFFFFFFFL, lastexit = 0;
 static long hostmsecs = 0, hostmax = 0, hostmin = 0xFFFFFFFFL;
-
+static int resultJmp = 0;
 /*
  * Run the interpreter, heartbeat before. Give it ALARM_MS msec or less to run.
  * ALARM_MS is defined in sqPlatformSpecific.h
@@ -1312,12 +1312,10 @@ int interp_run() {
       if(hosttm < hostmin) hostmin = hosttm;
     }
 	
-	
+	interpcnt++;
+	resultJmp = setjmp(jmpBufExit);
+	if(resultJmp == 0)interpret();
 
-	setjmp(jmpBufExit);
-    interpcnt++;
-	interpret();
-	
     long t2 = (ioUTCMicroseconds() / 1000LL);	
     long interptm = t2 - t1;
     lastexit = t2;
