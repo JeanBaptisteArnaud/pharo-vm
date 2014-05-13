@@ -1166,13 +1166,13 @@ dprintf(5, "%s %s\n", imageName, shortImageName);
 #      endif
       }
       recordFullPathForImageName(shortImageName); /* full image path */
-      dprintf(9, "extraMemory: %d\n", extraMemory);
+      //dprintf(9, "extraMemory: %d\n", extraMemory);
       if (extraMemory)
 	useMmap= 0;
       else
 	extraMemory= DefaultHeapSize * 1024 *1024;
 #    ifdef DEBUG_IMAGE
-      dprintf(9, "image size %d + heap size %d (useMmap = %d)\n", 
+      //dprintf(9, "image size %d + heap size %d (useMmap = %d)\n", 
 		      (int)sb.st_size, extraMemory, useMmap);
 #    endif
       extraMemory += (int)sb.st_size;
@@ -1214,23 +1214,11 @@ int interp_init(int argc, char **argv, char **envp)
 
   bigEndian = isBigEndian();
   nohrtbit = 1;
-  dprintf(7, "bigEndian = %d\n", bigEndian);
 
   /* Make parameters global for access from plugins */
-
   argCnt = argc;
   argVec = argv;
   envVec = envp;
-
-
-#ifdef DEBUG_IMAGE
-  {
-    int i= argc;
-    char **p= argv;
-    while (i--)
-      printf("arg: %s\n", *p++);
-  }
-#endif
 
   /* Allocate arrays to store copies of pointers to command line
      arguments.  Used by getAttributeIntoLength(). */
@@ -1249,7 +1237,6 @@ int interp_init(int argc, char **argv, char **envp)
   recordFullPathForVmName(argv[0]); /* full vm path */
   squeakPlugins= vmPath;		/* default plugin location is VM directory */
 
-dprintf(5, "vmPath: %s\n", vmPath);
 
 #if !DEBUG
   sqIgnorePluginErrors= 1;
@@ -1274,20 +1261,17 @@ dprintf(5, "vmPath: %s\n", vmPath);
   if (!realpath(argv[0], vmName))
     vmName[0]= 0; /* full VM name */
 
-#ifdef DEBUG_IMAGE
-  dprintf(9, "vmName: %s -> %s\n", argv[0], vmName);
-  dprintf(9, "viName: %s\n", shortImageName);
-  dprintf(9, "documentName: %s\n", documentName);
-#endif
 
-dprintf(5, "about to init time\n");
+// about to init time
 
   ioInitTime();
   aioInit();
   dpy->winInit();
-dprintf(5, "about to init image\n");
+
+//about to init image
+  
   imgInit();
-dprintf(5, "about to open window\n");
+//about to open window
   /* If running as a single instance and there are arguments after the image
    * and any are files then try and drop these on the existing instance.
    */
@@ -1328,9 +1312,10 @@ int interp_run() {
       if(hosttm < hostmin) hostmin = hosttm;
     }
 	
-    interpcnt++;
-	setjmp(jmpBufExit);
 	
+
+	setjmp(jmpBufExit);
+    interpcnt++;
 	interpret();
 	
     long t2 = (ioUTCMicroseconds() / 1000LL);	
@@ -1353,9 +1338,9 @@ int interp_run() {
 
 void interpStats(void)
 {
-  dprintf(1, "Interpreter entered: %d times\n", interpcnt);
-  dprintf(1, "Alarm timer (T), msec: %d\n", ALARM_MS);
-  dprintf(1, "Exited by alarm: %d times\n", alarmcnt);
+  // dprintf(1, "Interpreter entered: %d times\n", interpcnt);
+  // dprintf(1, "Alarm timer (T), msec: %d\n", ALARM_MS);
+  // dprintf(1, "Exited by alarm: %d times\n", alarmcnt);
   //dprintf(1, "Interpreter times, msec (min avg max): %ld, %ld, %ld\n", 
   //  interpmin, interpmsecs / interpcnt, interpmax);
   //dprintf(1, "Longer than 1.5 * T: %d times\n", gt1dot5);
