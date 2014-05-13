@@ -5,7 +5,7 @@
  *   Copyright (C) 2011 by Dmitry Golubovsky for the code added to support
  *   the event-driven VM.
  *	 
- *	 Copyright (C) 2014 by Arnaud Jean-Baptiste for clean and code support.
+ *	 Copyright (C) 2 by Dmitry Golubovsky for the code added to support
  *
  *   All rights reserved.
  *   
