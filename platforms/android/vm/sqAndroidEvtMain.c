@@ -1514,9 +1514,8 @@ isCFramePointerInUse()
 # endif /* defined(i386) || defined(__i386) || defined(__i386__) */
 #endif /* COGVM */
 
-/*	Answer true (non-zero) if running on a big endian machine. */
 
-sqInt ioInitHeartbeat(void);
+void ioInitHeartbeat(void){}
 
 sqInt isBigEndian(void) {
     char * cString;
