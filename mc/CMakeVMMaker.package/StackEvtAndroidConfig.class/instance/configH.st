@@ -108,7 +108,7 @@ configH
 /* architecture */
 
 #define	OS_TYPE "unix"
-
+#define USE_ARM_REGS 1
 #define	VM_HOST "i686-pc-linux-gnu"
 #define	VM_HOST_CPU "i686"
 /* #undef	VM_HOST_VENDOR */
