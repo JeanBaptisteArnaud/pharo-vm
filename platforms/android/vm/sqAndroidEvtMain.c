@@ -1516,6 +1516,8 @@ isCFramePointerInUse()
 
 /*	Answer true (non-zero) if running on a big endian machine. */
 
+sqInt ioInitHeartbeat(void);
+
 sqInt isBigEndian(void) {
     char * cString;
     sqInt i;
