@@ -256,6 +256,8 @@
 # define CB_REG __asm__("d7")
 #endif
 
+
+
 #if !defined(JP_REG)
 # define JP_REG
 #endif
