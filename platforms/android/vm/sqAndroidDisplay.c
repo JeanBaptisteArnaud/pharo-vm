@@ -278,15 +278,11 @@ int
 Java_org_pharo_stack_StackVM_interpret(JNIEnv *env, jobject jsqueak) {
   JNIEnv *oldEnv = CogEnv;
   jobject *oldCog = CogVM;
-  dprintf(7, "Interpret Enter\n");
   CogEnv = env;
   CogVM = jsqueak;
-  dprintf(7, "interp_run Enter\n");
   int rc = interp_run();
-  dprintf(7, "interp_run Leave\n");
   CogEnv = oldEnv;
   CogVM = oldCog;
-  dprintf(7, "Interpret Leave\n");
   return rc;
 }
 
@@ -430,8 +426,8 @@ Java_org_pharo_stack_StackVM_setImagePath(JNIEnv *env, jobject self,
   char *imgargv[maximgarg];
   int imgargc = splitcmd(cmdd, maximgarg, imgargv);
 int z;
-for(z = 0; z < imgargc; z++)
-	dprintf(9, "split [%d]: %s\n", z, imgargv[z]);
+//for(z = 0; z < imgargc; z++)
+//	dprintf(9, "split [%d]: %s\n", z, imgargv[z]);
   char *baseargs[] = {fakeExe, imageName};
   int argl = 2 + imgargc + 1;
   char **argc = alloca(sizeof(char *) * argl);
@@ -440,15 +436,13 @@ for(z = 0; z < imgargc; z++)
   for(j = 0; j < imgargc; j++, i++) argc[i] = imgargv[j];
   argc[i] = NULL;
   char *envp[] = {NULL};
-for(z = 0; z < argl; z++)
-	dprintf(9, "argc [%d]: %s\n", z, argc[z]);
+//for(z = 0; z < argl; z++)
+//	dprintf(9, "argc [%d]: %s\n", z, argc[z]);
   int rc = interp_init(argl - 1, argc, envp);
-	dprintf(5, "after interp_init\n");
   (*env)->ReleaseStringUTFChars(env, imageName_, imgpath);
   (*env)->ReleaseStringUTFChars(env, cmd_, cmd);
   jclass cls = (*env)->GetObjectClass(env, self);
   sqInvalidate = (*env)->GetMethodID(env, cls, "invalidate", "(IIII)V");
-  dprintf(5, "ImagePathOut\n");
   return rc;
 }
 

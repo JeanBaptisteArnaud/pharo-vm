@@ -1067,7 +1067,7 @@ char *getVersionInfo(int verbose)
 
 static void versionInfo(void)
 {
-  printf("%s", getVersionInfo(0));
+  dprintf(9,"%s", getVersionInfo(0));
   exit(0);
 }
 
@@ -1086,11 +1086,11 @@ static void parseArguments(int argc, char **argv)
       if (!strcmp(*argv, "--"))		/* escape from option processing */
 	break;
 #    ifdef DEBUG_IMAGE
-      dprintf(9, "parseArgument n = %d\n", n);
+      //dprintf(9, "parseArgument n = %d\n", n);
 #    endif
       if (n == 0)			/* option not recognised */
 	{
-	  fprintf(stderr, "unknown option: %s\n", argv[0]);
+	  //fprintf(stderr, "unknown option: %s\n", argv[0]);
 	}
       while (n--)
 	saveArg();
@@ -1109,7 +1109,7 @@ static void parseArguments(int argc, char **argv)
   /* save remaining arguments as Squeak arguments */
   while (argc > 0) {
     squeakArgVec[squeakArgCnt++]= *skipArg();
-    dprintf(9, "%s\n", squeakArgVec[squeakArgCnt - 1]);
+    //dprintf(9, "%s\n", squeakArgVec[squeakArgCnt - 1]);
   }
 
 # undef saveArg
