@@ -1,7 +1,7 @@
 {
 	"class" : {
-		"declareCVarsIn:" : "golubovsky 8/16/2011 22:47" },
+		"declareCVarsIn:" : "jb 5/13/2014 11:38" },
 	"instance" : {
 		"callbackEnter:" : "jb 5/6/2014 17:03",
 		"initStackPagesAndInterpret" : "jb 5/6/2014 17:20",
-		"primitiveRelinquishProcessor" : "jb 5/12/2014 17:52" } }
+		"primitiveRelinquishProcessor" : "jb 5/13/2014 11:37" } }
