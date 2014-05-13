@@ -1166,13 +1166,13 @@ dprintf(5, "%s %s\n", imageName, shortImageName);
 #      endif
       }
       recordFullPathForImageName(shortImageName); /* full image path */
-      //dprintf(9, "extraMemory: %d\n", extraMemory);
+      dprintf(9, "extraMemory: %d\n", extraMemory);
       if (extraMemory)
 	useMmap= 0;
       else
 	extraMemory= DefaultHeapSize * 1024 *1024;
 #    ifdef DEBUG_IMAGE
-      //dprintf(9, "image size %d + heap size %d (useMmap = %d)\n", 
+      dprintf(9, "image size %d + heap size %d (useMmap = %d)\n", 
 		      (int)sb.st_size, extraMemory, useMmap);
 #    endif
       extraMemory += (int)sb.st_size;
@@ -1340,7 +1340,7 @@ void interpStats(void)
 {
   // dprintf(1, "Interpreter entered: %d times\n", interpcnt);
   // dprintf(1, "Alarm timer (T), msec: %d\n", ALARM_MS);
-  // dprintf(1, "Exited by alarm: %d times\n", alarmcnt);
+  //dprintf(1, "Exited by alarm: %d times\n", alarmcnt);
   //dprintf(1, "Interpreter times, msec (min avg max): %ld, %ld, %ld\n", 
   //  interpmin, interpmsecs / interpcnt, interpmax);
   //dprintf(1, "Longer than 1.5 * T: %d times\n", gt1dot5);
