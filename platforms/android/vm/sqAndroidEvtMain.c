@@ -1314,8 +1314,10 @@ int interp_run() {
 	
 	interpcnt++;
 	resultJmp = setjmp(jmpBufExit);
-	if(resultJmp == 0)interpret();
-
+	if(resultJmp == 0){
+		dprintf(9, "Starting First Intepret loop");interpret();
+	}
+	else {dprintf(9, "Runnaway the Intepret loop");}
     long t2 = (ioUTCMicroseconds() / 1000LL);	
     long interptm = t2 - t1;
     lastexit = t2;
