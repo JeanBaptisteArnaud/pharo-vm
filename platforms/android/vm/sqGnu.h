@@ -205,10 +205,10 @@
 #endif
 
 #if defined(USE_ARM_REGS)
-# define IP_REG __asm__("r4")
-# define SP_REG __asm__("r5")
-# define CB_REG __asm__("r6")
-# define FP_REG __asm__("r7")
+# define IP_REG __asm__("r3")
+# define SP_REG __asm__("r4")
+# define CB_REG __asm__("r5")
+# define FP_REG __asm__("r6")
 #endif
 
 #if !defined(JP_REG)
