@@ -328,15 +328,13 @@ Java_org_pharo_stack_StackVM_sendEvent(JNIEnv *env, jobject self, int
 					   int arg3, int arg4, int arg5,
 					   int arg6, int arg7, int arg8) {
 
-	dprintf(7, "sendEvent type=%d\n", type);
-    int empty = iebEmptyP();
+	int empty = iebEmptyP();
     switch(type) {
 	case 1:				/* mouse/touch event, arg3=x, arg4=y, arg5=buttons */
 	    mousePosition.x = arg3;
 	    mousePosition.y = arg4;
             buttonState = arg5;
 	    recordMouseEvent();
-	dprintf(7, "mouse x=%d y=%d %d\n", arg3, arg4, arg5);
 	    break;
 	case 2:				/* keyboard input, arg3=charCode, arg5=mods, arg6=ucs4 */
 	    recordKeyboardEvent(arg3, arg4, arg5, arg6);
