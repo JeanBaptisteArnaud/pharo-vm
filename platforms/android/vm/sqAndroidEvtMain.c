@@ -144,7 +144,6 @@ struct SqDisplay *dpy= 0;
 struct SqSound   *snd= 0;
 
 extern struct SqModule sound_null, display_android;
-extern jmp_buf jmpBufExit;
 
 extern void dumpPrimTraceLog(void);
 
