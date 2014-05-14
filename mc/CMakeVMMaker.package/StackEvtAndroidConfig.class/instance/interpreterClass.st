@@ -1,3 +1,4 @@
 source generation
 interpreterClass
-	^ StackEvtInterpreter
+	"^ StackEvtInterpreter"
+	^StackInterpreterPrimitives 
