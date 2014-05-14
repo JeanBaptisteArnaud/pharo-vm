@@ -4,4 +4,4 @@ configureFilePlugin: maker
 
 	super configureFilePlugin: maker.  
 	
-	maker addPlatformSources: #( 'sqAndroidFile.c')
+	maker addPlatformSources: #( 'sqUnixFile.c')
