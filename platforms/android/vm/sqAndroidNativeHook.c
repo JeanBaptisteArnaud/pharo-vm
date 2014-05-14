@@ -3,6 +3,7 @@
  * the zeroth argument pointing to the image plus some fake executable name. This will
  * give the VM an idea where the image is.
  */
+#include <jni.h>
 
 int 
 Java_org_pharo_stack_StackVM_setImagePath(JNIEnv *env, jobject self,
