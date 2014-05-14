@@ -49,11 +49,7 @@ int z;
 int
 Java_org_pharo_stack_StackVM_setLogLevel(JNIEnv *env, jobject self, 
 					  int logLevel) {
-  unlink(LOG_FILE);
-  vmLogLevel = logLevel;
-  memset(logbuf, 0, LOGLEN);
-  loglen = 0;
-  return vmLogLevel;
+
 }
 
 
@@ -66,10 +62,7 @@ Java_org_pharo_stack_StackVM_surelyExit(JNIEnv *env, jobject self) {
 int
 Java_org_pharo_stack_StackVM_setScreenSize(JNIEnv *env, jobject self,
 					       int w, int h) {
-  scrw = w;
-  scrh = h;
-  dprintf(9, "setScreenSize w: %d, h: %d\n", scrw, scrh);
-  return 0;
+
 }
 
 int 
@@ -90,57 +83,9 @@ int
 Java_org_pharo_stack_StackVM_updateDisplay(JNIEnv *env, jobject self,
 					       jintArray bits, int w, int h,
 					       int d, int left, int top, int right, int bottom) {
-  int row;
-  sqInt formObj = interpreterProxy->displayObject();
-  sqInt formBits = interpreterProxy->fetchPointerofObject(0, formObj);
-  sqInt width = interpreterProxy->fetchIntegerofObject(1, formObj);
-  sqInt height = interpreterProxy->fetchIntegerofObject(2, formObj);
-  sqInt depth = interpreterProxy->fetchIntegerofObject(3, formObj);
-  int *dispBits = interpreterProxy->firstIndexableField(formBits);
-
-  if (width == 777 && height == 777) return 1;
-
-  if(depth != 32) {
-    dprintf(4, "updateDisplay: Display depth %d\n", depth);
-    return 0;
-  }
-  if(width != w) {
-    dprintf(4, "updateDisplay: Display width is %d (expected %d)\n", width, w);
-  }
-  if(height != h) {
-    dprintf(4, "updateDisplay: Display height is %d (expected %d)\n", height, h);
-  }
-  for(row = top; row < bottom; row++) {
-  	int ofs = width*row+left;
-  	(*env)->SetIntArrayRegion(env, bits, ofs, right-left, dispBits+ofs);
-  }
-  return 1;
 }
 
 /*
  * For type 2, record a key press event, for type 1, record a mouse event.
  * Return 1 if input queue was empty prior to buffering this event.
  */
-
-int 
-Java_org_pharo_stack_StackVM_sendEvent(JNIEnv *env, jobject self, int 
-					   type, int stamp,
-					   int arg3, int arg4, int arg5,
-					   int arg6, int arg7, int arg8) {
-
-	int empty = iebEmptyP();
-    switch(type) {
-	case 1:				/* mouse/touch event, arg3=x, arg4=y, arg5=buttons */
-	    mousePosition.x = arg3;
-	    mousePosition.y = arg4;
-            buttonState = arg5;
-	    recordMouseEvent();
-	    break;
-	case 2:				/* keyboard input, arg3=charCode, arg5=mods, arg6=ucs4 */
-	    recordKeyboardEvent(arg3, arg4, arg5, arg6);
-	    break;
-	default:
-	    break;
-    }
-    return empty;
-}
