@@ -5,6 +5,9 @@
  */
 #include <jni.h>
 
+#define MAXPATHLEN 256
+#define NULL  (void*)0
+
 int 
 Java_org_pharo_stack_StackVM_setImagePath(JNIEnv *env, jobject self,
 					      jstring imageName_, jstring cmd_) {
@@ -42,7 +45,7 @@ int z;
   (*env)->ReleaseStringUTFChars(env, imageName_, imgpath);
   (*env)->ReleaseStringUTFChars(env, cmd_, cmd);
   jclass cls = (*env)->GetObjectClass(env, self);
-  sqInvalidate = (*env)->GetMethodID(env, cls, "invalidate", "(IIII)V");
+  //sqInvalidate = (*env)->GetMethodID(env, cls, "invalidate", "(IIII)V");
   return rc;
 }
 
@@ -67,15 +70,15 @@ Java_org_pharo_stack_StackVM_setScreenSize(JNIEnv *env, jobject self,
 
 int 
 Java_org_pharo_stack_StackVM_interpret(JNIEnv *env, jobject jsqueak) {
-  JNIEnv *oldEnv = CogEnv;
-  jobject *oldCog = CogVM;
+//  JNIEnv *oldEnv = CogEnv;
+ // jobject *oldCog = CogVM;
   
   
-  CogEnv = env;
-  CogVM = jsqueak;
+  //CogEnv = env;
+  //CogVM = jsqueak;
   int rc = interp_run();
-  CogEnv = oldEnv;
-  CogVM = oldCog;
+  //CogEnv = oldEnv;
+  //CogVM = oldCog;
   return rc;
 }
 
