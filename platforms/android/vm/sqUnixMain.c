@@ -1739,7 +1739,7 @@ void imgInit(void)
 #endif
 
 int
-main(int argc, char **argv, char **envp)
+libMain(int argc, char **argv, char **envp)
 {
   fldcw(0x12bf);	/* signed infinity, round to nearest, REAL8, disable intrs, disable signals */
   mtfsfi(0);		/* disable signals, IEEE mode, round to nearest */

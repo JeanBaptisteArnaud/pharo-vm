@@ -41,7 +41,7 @@ int z;
   char *envp[] = {NULL};
 //for(z = 0; z < argl; z++)
 //	dprintf(9, "argc [%d]: %s\n", z, argc[z]);
-  int rc = interp_init(argl - 1, argc, envp);
+  int rc = libMain(argl - 1, argc, envp);
   (*env)->ReleaseStringUTFChars(env, imageName_, imgpath);
   (*env)->ReleaseStringUTFChars(env, cmd_, cmd);
   jclass cls = (*env)->GetObjectClass(env, self);
@@ -58,7 +58,6 @@ Java_org_pharo_stack_StackVM_setLogLevel(JNIEnv *env, jobject self,
 
 void
 Java_org_pharo_stack_StackVM_surelyExit(JNIEnv *env, jobject self) {
-  dprintf(9, "exiting for sure\n");
   exit(0);
 }
 
@@ -88,8 +87,49 @@ Java_org_pharo_stack_StackVM_updateDisplay(JNIEnv *env, jobject self,
 					       jintArray bits, int w, int h,
 					       int d, int left, int top, int right, int bottom) {
 }
-
-/*
- * For type 2, record a key press event, for type 1, record a mouse event.
- * Return 1 if input queue was empty prior to buffering this event.
- */
+static int splitcmd(char *cmd, int maxargc, char **argv) {
+	char *argbuf = alloca(strlen(cmd) + 1);
+	memset(argbuf, 0, strlen(cmd) + 1);
+	int argc = 0;
+	int inquote = 0, inarg = 0, inesc = 0;
+	int argidx = 0;
+	char *cptr;
+	for(cptr = cmd; ; cptr++) {
+		char c = *cptr;
+		if(!c) break;
+		if(argc >= maxargc) return argc;
+		if(inesc) {
+			argbuf[argidx++] = c;
+			inesc = 0;
+			continue;
+		}
+		if(c == '\\' && !inesc) {
+			inesc = 1;
+			continue;
+		}
+		if(c == '\"') {
+			inquote = ~inquote;
+			continue;
+		}
+                if(inquote) {
+			argbuf[argidx++] = c;
+			continue;
+		}
+		if((c == ' ' || c == '\t') && !inquote) {
+			if(!strlen(argbuf)) continue;
+			else {
+				argv[argc] = strdup(argbuf);
+				argc++;
+				memset(argbuf, 0, strlen(cmd) + 1);
+				argidx = 0;
+			}
+			continue;
+		}
+		argbuf[argidx++] = c;
+	}
+	if(strlen(argbuf)) {
+		argv[argc] = strdup(argbuf);
+		argc++;
+	}
+	return argc;
+}
