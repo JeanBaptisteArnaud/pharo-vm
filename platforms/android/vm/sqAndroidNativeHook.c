@@ -76,10 +76,11 @@ Java_org_pharo_stack_StackVM_interpret(JNIEnv *env, jobject jsqueak) {
   
   //CogEnv = env;
   //CogVM = jsqueak;
-  int rc = interp_run();
+  //int rc = interp_run();
+  interpret();
   //CogEnv = oldEnv;
   //CogVM = oldCog;
-  return rc;
+  return 1;
 }
 
 int 
