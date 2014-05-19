@@ -4,9 +4,44 @@
  * give the VM an idea where the image is.
  */
 #include <jni.h>
+#include <android/log.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include "sqMemoryAccess.h"
+#include "sqVirtualMachine.h"
 
+#define LOG_FILE "/sdcard/jni.log"
 #define MAXPATHLEN 256
 #define NULL  (void*)0
+
+extern struct VirtualMachine *interpreterProxy;
+
+
+
+void jnilog(char *str) {
+	int fd = open(LOG_FILE, O_RDWR | O_APPEND | O_CREAT, 0666);
+	if(fd > -1) {
+		int ms = ioMSecs();
+		char msstr[50];
+		snprintf(msstr, 49, "[%d] ", ms);
+		write(fd, msstr, strlen(msstr));
+		write(fd, str, strlen(str));
+		close(fd);
+	}
+}
+
+int sdprintf(const char *fmt, ...) {
+  int result;
+  va_list args;
+  va_start(args, fmt);
+  result = __android_log_vprint(ANDROID_LOG_INFO, "Smalltalk", fmt, args);
+	char str[10000];
+	vsnprintf(str, 9999, fmt, args);
+	jnilog(str);
+  va_end(args);
+  return result;
+}
 
 int 
 Java_org_pharo_stack_StackVM_setImagePath(JNIEnv *env, jobject self,
@@ -40,8 +75,9 @@ int z;
   argc[i] = NULL;
   char *envp[] = {NULL};
 //for(z = 0; z < argl; z++)
-//	dprintf(9, "argc [%d]: %s\n", z, argc[z]);
-  int rc = libMain(argl - 1, argc, envp);
+  sdprintf("main");
+  int rc = main(argl - 1, argc, envp);
+  
   (*env)->ReleaseStringUTFChars(env, imageName_, imgpath);
   (*env)->ReleaseStringUTFChars(env, cmd_, cmd);
   jclass cls = (*env)->GetObjectClass(env, self);
@@ -56,6 +92,31 @@ Java_org_pharo_stack_StackVM_setLogLevel(JNIEnv *env, jobject self,
 }
 
 
+int 
+Java_org_pharo_stack_StackVM_updateDisplay(JNIEnv *env, jobject self,
+					       jintArray bits, int w, int h,
+					       int d, int left, int top, int right, int bottom) {
+  int row;
+  sqInt formObj = interpreterProxy->displayObject();
+  sqInt formBits = interpreterProxy->fetchPointerofObject(0, formObj);
+  sqInt width = interpreterProxy->fetchIntegerofObject(1, formObj);
+  sqInt height = interpreterProxy->fetchIntegerofObject(2, formObj);
+  sqInt depth = interpreterProxy->fetchIntegerofObject(3, formObj);
+  int *dispBits = interpreterProxy->firstIndexableField(formBits);
+
+  
+    sdprintf( "updateDisplay: Display depth %d\n", depth);
+    sdprintf( "updateDisplay: Display width is %d (expected %d)\n", width, w);
+    sdprintf( "updateDisplay: Display height is %d (expected %d)\n", height, h);
+  
+  for(row = top; row < bottom; row++) {
+  	int ofs = width*row+left;
+  	(*env)->SetIntArrayRegion(env, bits, ofs, right-left, dispBits+ofs);
+  }
+  return 1;
+}
+
+
 void
 Java_org_pharo_stack_StackVM_surelyExit(JNIEnv *env, jobject self) {
   exit(0);
@@ -66,28 +127,14 @@ Java_org_pharo_stack_StackVM_setScreenSize(JNIEnv *env, jobject self,
 					       int w, int h) {
 
 }
-
-int 
-Java_org_pharo_stack_StackVM_interpret(JNIEnv *env, jobject jsqueak) {
-//  JNIEnv *oldEnv = CogEnv;
- // jobject *oldCog = CogVM;
-  
-  
-  //CogEnv = env;
-  //CogVM = jsqueak;
-  //int rc = interp_run();
-  interpret();
-  //CogEnv = oldEnv;
-  //CogVM = oldCog;
-  return 1;
+Java_org_pharo_stack_StackVM_interpret(JNIEnv *env, jobject self) {
+	sdprintf("plop the world");
+	entryPoint();
 }
 
-int 
-Java_org_pharo_stack_StackVM_updateDisplay(JNIEnv *env, jobject self,
-					       jintArray bits, int w, int h,
-					       int d, int left, int top, int right, int bottom) {
-}
-static int splitcmd(char *cmd, int maxargc, char **argv) {
+
+
+int splitcmd(char *cmd, int maxargc, char **argv) {
 	char *argbuf = alloca(strlen(cmd) + 1);
 	memset(argbuf, 0, strlen(cmd) + 1);
 	int argc = 0;

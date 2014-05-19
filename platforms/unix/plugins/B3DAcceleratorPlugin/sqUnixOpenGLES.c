@@ -41,13 +41,6 @@
 #include <stdio.h>
 #include <sys/types.h>
 
-
-#if defined(HAVE_GLES)
-#define GLdouble     GLfloat
-#define GL_CLAMP     GL_CLAMP_TO_EDGE
-#define glClearDepth glClearDepthf
-#endif
-
 extern struct VirtualMachine *interpreterProxy;
 static struct SqDisplay	     *dpy= 0;
 
@@ -158,8 +151,6 @@ int glCreateRendererFlags(int x, int y, int w, int h, int flags)
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_NORMALIZE);
 	glDepthFunc(GL_LEQUAL);
-	
-	
 	glClearDepth(1.0);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 	glShadeModel(GL_SMOOTH);

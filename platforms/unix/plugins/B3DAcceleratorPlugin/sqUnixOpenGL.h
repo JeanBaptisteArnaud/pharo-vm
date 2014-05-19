@@ -17,15 +17,20 @@ typedef struct glRenderer
 # define GL_RENDERER_DEFINED	 1
 # define MAX_RENDERER		16
 
-# if defined(HAVE_GL_GL_H)
-#   include <GL/gl.h>
-# else
-#   if defined(HAVE_OPENGL_GL_H)
-#     include <OpenGL/gl.h>
-#   else
-#     error *** cannot find gl.h
-#   endif
-# endif
+#if  defined(HAVE_GLES)
+#include <GLES/gl.h>
+#	else
+# 	if defined(HAVE_GL_GL_H)
+#   	include <GL/gl.h>
+# 	else
+#   	if defined(HAVE_OPENGL_GL_H)
+#     		include <OpenGL/gl.h>
+#   	else
+#     		error *** cannot find gl.h
+#   	endif
+# 	endif
+#endif
+
 
 #endif
 

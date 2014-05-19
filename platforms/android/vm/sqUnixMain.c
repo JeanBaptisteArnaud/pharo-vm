@@ -47,6 +47,7 @@
 # undef ioMSecs
 #endif
 
+#include <setjmp.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -92,7 +93,7 @@
 static char   vmName[MAXPATHLEN+1];		/* full path to vm */
        char   vmPath[MAXPATHLEN+1];		/* full path to image directory */
 static char   vmLogDirA[PATH_MAX+1];	/* where to write crash.dmp */
-
+extern jmp_buf jmpBufExit;
        char  *exeName;					/* short vm name, e.g. "squeak" */
 
        int    argCnt=		0;	/* global copies for access from plugins */
@@ -165,6 +166,9 @@ static void sigalrm(int signum)
   lowResMSecs+= LOW_RES_TICK_MSECS;
   forceInterruptCheck();
 }
+
+
+extern int sdprintf(const char *fmt, ...);
 
 void
 ioInitTime(void)
@@ -304,14 +308,17 @@ static void pathCopyAbs(char *target, const char *src, size_t targetSize)
 static void
 recordPathsForVMName(const char *localVmName)
 {
+
 #if defined(__linux__)
   char	 name[MAXPATHLEN+1];
   int    len;
 #endif
 
+
 	exeName = strrchr(localVmName,'/')
 				? strrchr(localVmName,'/') + 1
 				: (char *)localVmName;
+
 
 #if defined(__linux__)
   if ((len= readlink("/proc/self/exe", name, sizeof(name))) > 0)
@@ -326,6 +333,7 @@ recordPathsForVMName(const char *localVmName)
   /* get canonical path to vm */
   if (realpath(localVmName, vmPath) == 0)
     pathCopyAbs(vmPath, localVmName, sizeof(vmPath));
+
 
   /* truncate vmPath to dirname */
   {
@@ -601,13 +609,13 @@ static void emergencyDump(int quit)
   printf("\nMost recent primitives\n");
   dumpPrimTraceLog();
 #endif
-  fprintf(stderr, "\n");
+  sdprintf(stderr, "\n");
   printCallStack();
-  fprintf(stderr, "\nTo recover valuable content from this image:\n");
-  fprintf(stderr, "    %s %s\n", exeName, imageName);
-  fprintf(stderr, "and then evaluate\n");
-  fprintf(stderr, "    Smalltalk processStartUpList: true\n");
-  fprintf(stderr, "in a workspace.  DESTROY the dumped image after recovering content!");
+  sdprintf(stderr, "\nTo recover valuable content from this image:\n");
+  sdprintf(stderr, "    %s %s\n", exeName, imageName);
+  sdprintf(stderr, "and then evaluate\n");
+  sdprintf(stderr, "    Smalltalk processStartUpList: true\n");
+  sdprintf(stderr, "in a workspace.  DESTROY the dumped image after recovering content!");
 
   if (quit) abort();
   strncpy(imageName, savedName, sizeof(imageName));
@@ -1026,7 +1034,7 @@ struct SqModule *queryLoadModule(char *type, char *name, int query)
       else
 	if (!query)
 	  {
-	    fprintf(stderr, "could not find module %s\n", modName);
+	    sdprintf(stderr, "could not find module %s\n", modName);
 	    return 0;
 	  }
     }
@@ -1035,7 +1043,7 @@ struct SqModule *queryLoadModule(char *type, char *name, int query)
       module= (struct SqModule *)itf;
       if (SqModuleVersion != module->version)
 	{
-	  fprintf(stderr, "module %s version %x does not have required version %x\n",
+	  sdprintf(stderr, "module %s version %x does not have required version %x\n",
 		  modName, module->version, SqModuleVersion);
 	  abort();
 	}
@@ -1046,7 +1054,7 @@ struct SqModule *queryLoadModule(char *type, char *name, int query)
       return module;
     }
   if (!query)
-    fprintf(stderr, "could not find interface %s in module %s\n", itfName, modName);
+    sdprintf(stderr, "could not find interface %s in module %s\n", itfName, modName);
   return 0;
 }
 
@@ -1107,7 +1115,7 @@ static void requireModuleNamed(char *type)	/*** NOTE: MODIFIES THE ARGUMENT! ***
       module= requireModule(type, name);
       if (!addr)
 	{
-	  fprintf(stderr, "this cannot happen\n");
+	  sdprintf(stderr, "this cannot happen\n");
 	  abort();
 	}
       *addr= module;
@@ -1137,7 +1145,7 @@ static void checkModuleVersion(struct SqModule *module, int required, int actual
 {
   if (required != actual)
     {
-      fprintf(stderr, "module %s interface version %x does not have required version %x\n",
+      sdprintf(stderr, "module %s interface version %x does not have required version %x\n",
 	      module->name, actual, required);
       abort();
     }
@@ -1148,16 +1156,17 @@ static void loadImplicit(struct SqModule **addr, char *evar, char *type, char *n
 {
   if ((!*addr) && getenv(evar) && !(*addr= queryModule(type, name)))
     {
-      fprintf(stderr, "could not find %s driver vm-%s-%s; either:\n", type, type, name);
-      fprintf(stderr, "  - check that %s/vm-%s-%s.so exists, or\n", vmPath, type, name);
-      fprintf(stderr, "  - use the '-plugins <path>' option to tell me where it is, or\n");
-      fprintf(stderr, "  - remove %s from your environment.\n", evar);
+      sdprintf("could not find %s driver vm-%s-%s; either:\n", type, type, name);
+      sdprintf("  - check that %s/vm-%s-%s.so exists, or\n", vmPath, type, name);
+      sdprintf("  - use the '-plugins <path>' option to tell me where it is, or\n");
+      sdprintf("  - remove %s from your environment.\n", evar);
       abort();
     }
 }
 
 static void loadModules(void)
 {
+    
   loadImplicit(&displayModule, "DISPLAY",     "display", "X11");
   loadImplicit(&soundModule,   "AUDIOSERVER", "sound",   "NAS");
   {
@@ -1166,20 +1175,17 @@ static void loadModules(void)
     for (md= defaultModules;  md->addr;  ++md)
       if (!*md->addr)
 	if ((*md->addr= queryModule(md->type, md->name)))
-#	 if defined(DEBUG_MODULES)
-	  fprintf(stderr, "%s: %s driver defaulting to vm-%s-%s\n", exeName, md->type, md->type, md->name)
-#	 endif
-	    ;
+	  sdprintf(stderr, "%s: %s driver defaulting to vm-%s-%s\n", exeName, md->type, md->type, md->name);
   }
 
   if (!displayModule)
     {
-      fprintf(stderr, "%s: could not find any display driver\n", exeName);
+      sdprintf(stderr, "%s: could not find any display driver\n", exeName);
       abort();
     }
   if (!soundModule)
     {
-      fprintf(stderr, "%s: could not find any sound driver\n", exeName);
+      sdprintf(stderr, "%s: could not find any sound driver\n", exeName);
       abort();
     }
 
@@ -1232,7 +1238,7 @@ static void vm_parseEnvironment(void)
   if (ev)
     setLocaleEncoding(ev);
   else
-    fprintf(stderr, "setlocale() failed (check values of LC_CTYPE, LANG and LC_ALL)\n");
+    sdprintf(stderr, "setlocale() failed (check values of LC_CTYPE, LANG and LC_ALL)\n");
 
   if (documentName)
     strcpy(shortImageName, documentName);
@@ -1267,7 +1273,7 @@ static int parseModuleArgument(int argc, char **argv, struct SqModule **addr, ch
 {
   if (*addr)
     {
-      fprintf(stderr, "option '%s' conflicts with previously-loaded module '%s'\n", *argv, (*addr)->name);
+      sdprintf(stderr, "option '%s' conflicts with previously-loaded module '%s'\n", *argv, (*addr)->name);
       exit(1);
     }
   *addr= requireModule(type, name);
@@ -1499,7 +1505,7 @@ static void vm_printUsageNotes(void)
 
 static void *vm_makeInterface(void)
 {
-  fprintf(stderr, "this cannot happen\n");
+  sdprintf(stderr, "this cannot happen\n");
   abort();
 }
 
@@ -1540,6 +1546,15 @@ static void usage(void)
   for (m= modules;  m->next;  m= m->next) {
     printf("  %s\n", m->name);
   }
+}
+
+
+
+void entryPoint() {
+	if (runInterpreter) {
+		printPhaseTime(2);
+		if(setjmp(jmpBufExit)) interpret();
+	}
 }
 
 
@@ -1627,7 +1642,7 @@ static void parseArguments(int argc, char **argv)
 #    endif
       if (n == 0)			/* option not recognised */
 	{
-	  fprintf(stderr, "unknown option: %s\n", argv[0]);
+	  sdprintf(stderr, "unknown option: %s\n", argv[0]);
 	  usage();
 	  exit(1);
 	}
@@ -1661,7 +1676,7 @@ static void
 imageNotFound(char *imageName)
 {
   /* image file is not found */
-  fprintf(stderr,
+  sdprintf(stderr,
 	  "Could not open the " IMAGE_DIALECT_NAME " image file `%s'.\n"
 	  "\n"
 	  "There are three ways to open a " IMAGE_DIALECT_NAME " image file.  You can:\n"
@@ -1738,8 +1753,7 @@ void imgInit(void)
 # define mtfsfi(fpscr)
 #endif
 
-int
-libMain(int argc, char **argv, char **envp)
+int main(int argc, char **argv, char **envp)
 {
   fldcw(0x12bf);	/* signed infinity, round to nearest, REAL8, disable intrs, disable signals */
   mtfsfi(0);		/* disable signals, IEEE mode, round to nearest */
@@ -1750,15 +1764,6 @@ libMain(int argc, char **argv, char **envp)
   argVec= argv;
   envVec= envp;
 
-#ifdef DEBUG_IMAGE
-  {
-    int i= argc;
-    char **p= argv;
-    while (i--)
-      printf("arg: %s\n", *p++);
-  }
-#endif
-
   /* Allocate arrays to store copies of pointers to command line
      arguments.  Used by getAttributeIntoLength(). */
 
@@ -1768,61 +1773,53 @@ libMain(int argc, char **argv, char **envp)
   if ((squeakArgVec= calloc(argc + 1, sizeof(char *))) == 0)
     outOfMemory();
 
-#if defined(__alpha__) && defined(__osf__)
-  /* disable printing of unaligned access exceptions */
-  {
-    int buf[2]= { SSIN_UACPROC, UAC_NOPRINT };
-    if (setsysinfo(SSI_NVPAIRS, buf, 1, 0, 0, 0) < 0)
-      {
-	perror("setsysinfo(UAC_NOPRINT)");
-      }
-  }
-#endif
-
 #if defined(HAVE_TZSET)
   tzset();	/* should _not_ be necessary! */
 #endif
-
   recordPathsForVMName(argv[0]); /* full vm path */
   squeakPlugins= vmPath;		/* default plugin location is VM directory */
 
-#if !DEBUG
-  sqIgnorePluginErrors= 1;
-#endif
+
+//  sqIgnorePluginErrors= 1;
+  sdprintf("begin Module");
   if (!modules)
     modules= &vm_Module;
   vm_Module.parseEnvironment();
   parseArguments(argc, argv);
+  
   if ((!dpy) || (!snd))
-    loadModules();
-#if !DEBUG
-  sqIgnorePluginErrors= 0;
-#endif
+	  loadModules();
+  
+ 
+ // sqIgnorePluginErrors= 0;
 
-#if defined(DEBUG_MODULES)
-  printf("displayModule %p %s\n", displayModule, displayModule->name);
-  if (soundModule)
-    printf("soundModule   %p %s\n", soundModule,   soundModule->name);
-#endif
+  //sdprintf("displayModule %p %s\n", displayModule, displayModule->name);
+  //if (soundModule)
+  //  sdprintf("soundModule   %p %s\n", soundModule,   soundModule->name);
 
-  if (!realpath(argv[0], vmName))
-    vmName[0]= 0; /* full VM name */
+  //if (!realpath(argv[0], vmName))
+  // vmName[0]= 0; /* full VM name */
 
-#ifdef DEBUG_IMAGE
-  printf("vmName: %s -> %s\n", argv[0], vmName);
-  printf("viName: %s\n", shortImageName);
-  printf("documentName: %s\n", documentName);
-#endif
 
+  sdprintf("vmName: %s -> %s\n", argv[0], vmName);
+  sdprintf("viName: %s\n", shortImageName);
+  sdprintf("documentName: %s\n", documentName);
+
+  sdprintf("ioInitTime");
   ioInitTime();
+  sdprintf("ioInitThreads");
   ioInitThreads();
+  sdprintf("aioInit");
   aioInit();
-  dpy->winInit();
+  sdprintf("winInit");
+  //dpy->winInit();
+  sdprintf("imgInit");
   imgInit();
   /* If running as a single instance and there are arguments after the image
    * and any are files then try and drop these on the existing instance.
    */
-  dpy->winOpen(runAsSingleInstance ? squeakArgCnt : 0, squeakArgVec);
+  sdprintf("winOpen");
+  //dpy->winOpen(runAsSingleInstance ? squeakArgCnt : 0, squeakArgVec);
 
 #if defined(HAVE_LIBDL) && !STACKVM
   if (useJit)
@@ -1841,7 +1838,7 @@ libMain(int argc, char **argv, char **envp)
       if (comp)
 	{
 	  ((void (*)(void))comp)();
-	  fprintf(stderr, "handing control back to interpret() -- have a nice day\n");
+	  sdprintf(stderr, "handing control back to interpret() -- have a nice day\n");
 	}
       else
 	printf("could not find j_interpret\n");
@@ -1871,10 +1868,11 @@ libMain(int argc, char **argv, char **envp)
 #endif
 
   /* run Squeak */
-  if (runInterpreter) {
-	printPhaseTime(2);
-    interpret();
-  }
+  entryPoint();
+//  if (runInterpreter) {
+//	printPhaseTime(2);
+//	if(setjmp(jmpBufExit)) interpret();
+//  }
 
   /* we need these, even if not referenced from main executable */
   (void)sq2uxPath;
