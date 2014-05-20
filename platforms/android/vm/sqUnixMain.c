@@ -1018,23 +1018,27 @@ struct SqModule *queryLoadModule(char *type, char *name, int query)
   struct SqModule *module= 0;
   void *itf= 0;
   sprintf(modName, "vm-%s-%s", type, name);
-#ifdef DEBUG_MODULES
-  printf("looking for module %s\n", modName);
-#endif
+  sdprintf("looking for module %s\n", modName);
   modulesDo (module)
     if (!strcmp(module->name, modName))
       return module;
   sprintf(itfName, "%s_%s", type, name);
+  sdprintf("looking for module %s\n", itfName);
   itf= ioFindExternalFunctionIn(itfName, ioLoadModule(0));
   if (!itf)
     {
+	  sdprintf("looking in");
+  
       void *handle= ioLoadModule(modName);
-      if (handle)
+      if (handle) {
+	sdprintf("looking in");
+  
 	itf= ioFindExternalFunctionIn(itfName, handle);
-      else
+	}
+	  else
 	if (!query)
 	  {
-	    sdprintf(stderr, "could not find module %s\n", modName);
+	    sdprintf("could not find module %s\n", modName);
 	    return 0;
 	  }
     }
@@ -1166,9 +1170,12 @@ static void loadImplicit(struct SqModule **addr, char *evar, char *type, char *n
 
 static void loadModules(void)
 {
+   sdprintf(" DISPLAY\n");
     
-  loadImplicit(&displayModule, "DISPLAY",     "display", "X11");
-  loadImplicit(&soundModule,   "AUDIOSERVER", "sound",   "NAS");
+  loadImplicit(&displayModule, "DISPLAY",     "display", "null");
+  sdprintf(" SOUND\n");
+ 
+  loadImplicit(&soundModule,   "AUDIOSERVER", "sound",   "null");
   {
     struct moduleDescription *md;
 
