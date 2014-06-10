@@ -294,6 +294,29 @@ void *
 ioLoadModule(char *pluginName)
 {
 	void *handle= 0;
+/*  hackish but workin search a better way */
+
+#ifdef android
+	char androidPath[MAXPATHLEN]; 
+	if(pluginName ==  NULL) return 0;
+	sdprintf("Try to load for Android : %s", pluginName);
+	sprintf(androidPath, "/data/app-lib/pharo.eu.android-1/%s.so", pluginName);
+    handle = dlopen(androidPath, RTLD_NOW | RTLD_GLOBAL);
+    if (!handle) {
+		sprintf(androidPath, "/data/app-lib/pharo.eu.android-2/%s.so", pluginName);
+		handle = dlopen(androidPath, RTLD_NOW | RTLD_GLOBAL);
+	}
+    if (!handle) {
+		sprintf(androidPath, "/data/app-lib/pharo.eu.android-3/%s.so", pluginName);
+		handle = dlopen(androidPath, RTLD_NOW | RTLD_GLOBAL);
+	}
+	if (!handle)  sdprintf("handle not loaded correctly");
+	if (handle) { 
+		sdprintf("android plugin found");
+		return handle;}
+	return 0;
+#endif
+
 
 	if (!pluginName || !*pluginName) {
 		if (!(handle= dlopen(0, RTLD_NOW | RTLD_GLOBAL))) {

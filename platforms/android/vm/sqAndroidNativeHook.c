@@ -14,10 +14,7 @@
 #define LOG_FILE "/sdcard/jni.log"
 #define MAXPATHLEN 256
 #define NULL  (void*)0
-
 extern struct VirtualMachine *interpreterProxy;
-
-
 
 void jnilog(char *str) {
 	int fd = open(LOG_FILE, O_RDWR | O_APPEND | O_CREAT, 0666);
